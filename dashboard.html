@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ether Nexus | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #ffffff; }
+        .tool-card { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; position: relative; overflow: hidden; }
+        .tool-card:hover { border-color: #6366f1; transform: translateY(-5px); background: #111111; }
+        .badge { font-[900] text-[8px] uppercase tracking-tighter px-2 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded; }
+    </style>
+</head>
+<body class="bg-[#050505]">
+
+    <nav class="border-b border-white/5 p-6 flex justify-between items-center bg-black/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <svg viewBox="0 0 100 100" class="w-6 h-6 text-indigo-500 fill-none stroke-current stroke-[6]"><path d="M50 5 L90 30 L90 70 L50 95 L10 70 L10 30 Z" /></svg>
+            <span class="font-black tracking-widest text-xs">ETHER NEXUS v2.0</span>
+        </div>
+        <div class="flex items-center gap-6">
+            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">User: alexis.r@etherlogic.com</span>
+            <a href="index.html" class="text-red-500 text-xs font-bold uppercase border border-red-500/20 px-4 py-2 hover:bg-red-500/10 transition-all">Salir</a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-8 md:p-12">
+        <header class="mb-12">
+            <h1 class="text-4xl font-black tracking-tighter uppercase mb-2">Workspace</h1>
+            <p class="text-gray-500 font-light">Selecciona una herramienta para comenzar la sesión de trabajo.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="tool-card p-8 group">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fas fa-microchip text-2xl text-indigo-500"></i>
+                    <span class="badge">Sistemas</span>
+                </div>
+                <h3 class="font-black text-sm uppercase tracking-widest mb-3">Terminal de Infraestructura</h3>
+                <p class="text-gray-500 text-xs leading-relaxed mb-6">Acceso a logs, despliegue de contenedores y monitoreo de salud del servidor.</p>
+                <a href="sistemas.html" class="inline-block text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] group-hover:underline">Abrir Terminal →</a>
+            </div>
+
+            <div class="tool-card p-8 group">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fas fa-id-card text-2xl text-indigo-500"></i>
+                    <span class="badge">Administración</span>
+                </div>
+                <h3 class="font-black text-sm uppercase tracking-widest mb-3">Gestión Documental</h3>
+                <p class="text-gray-500 text-xs leading-relaxed mb-6">Base de datos de colaboradores. Registro de DNI, Pasaportes y contratos migratorios.</p>
+                <a href="administracion.html" class="inline-block text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] group-hover:underline">Gestionar Datos →</a>
+            </div>
+
+            <div class="tool-card p-8 group">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fas fa-chart-line text-2xl text-indigo-500"></i>
+                    <span class="badge">Marketing</span>
+                </div>
+                <h3 class="font-black text-sm uppercase tracking-widest mb-3">Growth Analytics</h3>
+                <p class="text-gray-500 text-xs leading-relaxed mb-6">Visualización de impacto de marca, métricas de LinkedIn y leads entrantes.</p>
+                <a href="#" class="inline-block text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] group-hover:underline">Ver Reportes →</a>
+            </div>
+
+            <div class="tool-card p-8 group">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fas fa-heart text-2xl text-indigo-500"></i>
+                    <span class="badge">RRHH</span>
+                </div>
+                <h3 class="font-black text-sm uppercase tracking-widest mb-3">Portal del Talento</h3>
+                <p class="text-gray-500 text-xs leading-relaxed mb-6">Gestión de vacaciones, beneficios y capacitaciones internas del equipo.</p>
+                <a href="#" class="inline-block text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] group-hover:underline">Entrar Portal →</a>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
