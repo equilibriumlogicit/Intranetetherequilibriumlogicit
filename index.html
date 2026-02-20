@@ -99,20 +99,20 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // 1. CONFIGURACIÓN FIREBASE (REEMPLAZA ESTO CON TUS DATOS)
+        // 1. CONFIGURACIÓN FIREBASE CARGADA
         const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "tu-proyecto.firebaseapp.com",
-            projectId: "tu-proyecto",
-            storageBucket: "tu-proyecto.appspot.com",
-            messagingSenderId: "tu-id",
-            appId: "tu-app-id"
+            apiKey: "AIzaSyAZHuvxrFGeUn_DbexfgbQw8IjP1xtoMnc",
+            authDomain: "ether-nexus-intranet.firebaseapp.com",
+            projectId: "ether-nexus-intranet",
+            storageBucket: "ether-nexus-intranet.firebasestorage.app",
+            messagingSenderId: "380189316193",
+            appId: "1:380189316193:web:a3f0f430c2e26f5e9e4620"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         
-        // 2. PUBLIC KEY DE EMAILJS YA INTEGRADA
+        // 2. PUBLIC KEY DE EMAILJS
         emailjs.init("jVFbff94NuuTI0jix"); 
 
         let isLogin = true;
@@ -163,7 +163,7 @@
                 if(!fullName) { alert("SISTEMA: Ingrese su nombre completo."); return; }
                 
                 const tempPass = Math.random().toString(36).slice(-8).toUpperCase();
-                const loginLink = window.location.href; 
+                const loginLink = window.location.origin + window.location.pathname; 
                 
                 mainBtn.innerText = "INICIANDO PROTOCOLO...";
                 mainBtn.disabled = true;
@@ -172,21 +172,20 @@
                     const userCredential = await createUserWithEmailAndPassword(auth, email, tempPass);
                     await updateProfile(userCredential.user, { displayName: fullName });
 
-                    // ENVÍO DE EMAIL
+                    // ENVÍO DE EMAIL (Service ID y Template ID de tu cuenta)
                     await emailjs.send("service_lcrwaff", "template_hr615us", {
                         nombre_completo: fullName,
                         email: email, 
                         passcode: tempPass,
                         link_ingreso: loginLink,
-                        time: new Date(Date.now() + 15*60000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        time: new Date().toLocaleTimeString()
                     });
 
                     alert("SISTEMA: Protocolo aceptado. Revise su correo (" + email + ") para obtener su clave temporal.");
                     window.location.reload(); 
 
                 } catch (error) {
-                    // Si el error es por dominio no autorizado, Firebase lo dirá aquí
-                    alert("DETALLE DEL ERROR: " + error.message);
+                    alert("ERROR: " + error.message);
                     errorDiv.innerText = "FALLO DE SISTEMA: " + error.message;
                     errorDiv.classList.remove('hidden');
                     mainBtn.innerText = "Registrar Equipo";
