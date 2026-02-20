@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus | Inicializando...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap');
+        body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; }
+        
+        .loader-bar {
+            height: 2px;
+            background: #6366f1;
+            box-shadow: 0 0 15px #6366f1;
+            animation: load 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes load {
+            0% { width: 0%; opacity: 0.5; }
+            50% { width: 70%; opacity: 1; }
+            100% { width: 100%; }
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.1), transparent);
+            position: absolute;
+            animation: scan 2s infinite linear;
+        }
+
+        @keyframes scan {
+            0% { top: -100px; }
+            100% { top: 100vh; }
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col items-center justify-center overflow-hidden">
+    <div class="scan-line"></div>
+
+    <div class="relative z-10 text-center">
+        <div class="flex justify-center mb-8">
+            <svg viewBox="0 0 100 100" class="w-16 h-16 text-indigo-500 fill-none stroke-current stroke-[4] animate-pulse">
+                <path d="M50 5 L90 30 L90 70 L50 95 L10 70 L10 30 Z" />
+            </svg>
+        </div>
+
+        <h2 class="text-[10px] tracking-[0.5em] uppercase font-black text-indigo-500 mb-2">Iniciando Protocolos</h2>
+        <h1 class="text-2xl font-black uppercase tracking-tighter mb-8">Ether Nexus <span class="text-gray-600">v1.0</span></h1>
+
+        <div class="w-64 bg-white/5 h-[2px] mb-4 mx-auto overflow-hidden">
+            <div class="loader-bar"></div>
+        </div>
+
+        <div id="status" class="text-[9px] text-gray-500 uppercase font-bold tracking-widest h-4">
+            Verificando credenciales...
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "tu-proyecto.firebaseapp.com",
+            projectId: "tu-proyecto",
+            storageBucket: "tu-proyecto.appspot.com",
+            messagingSenderId: "tu-id",
+            appId: "tu-app-id"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const statusText = document.getElementById('status');
+        const messages = [
+            "Autenticando usuario...",
+            "Cargando módulos de ingeniería...",
+            "Sincronizando base de datos...",
+            "Acceso concedido."
+        ];
+
+        let i = 0;
+        const interval = setInterval(() => {
+            if(i < messages.length) {
+                statusText.innerText = messages[i];
+                i++;
+            }
+        }, 600);
+
+        // Verificar si el usuario está realmente logueado antes de entrar al index
+        onAuthStateChanged(auth, (user) => {
+            setTimeout(() => {
+                if (user) {
+                    window.location.href = "index.html";
+                } else {
+                    window.location.href = "auth.html"; // Si no hay sesión, regresa al login
+                }
+            }, 2600); // Espera a que termine la animación de la barra
+        });
+    </script>
+</body>
+</html>

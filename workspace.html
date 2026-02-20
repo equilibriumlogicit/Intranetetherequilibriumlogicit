@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ether Nexus | Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #050505; 
+            color: #ffffff; 
+            overflow-x: hidden; 
+        }
+
+        @keyframes etherPulse {
+            0%, 100% { filter: grayscale(100%) brightness(0.7); transform: scale(1); }
+            50% { filter: grayscale(0%) brightness(1.1); transform: scale(1.02); }
+        }
+
+        .workspace-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 2rem; 
+        }
+
+        .icon-box { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            aspect-ratio: 1/1;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-box::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) brightness(0.2);
+            opacity: 0.6;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 0;
+        }
+
+        .personal-card::before { background-image: url('coffe-office.jpg'); }
+        .contract-card::before { background-image: url('contractor.jpg'); }
+        .tools-card::before { background-image: url('workstation.jpg'); }
+        .support-card::before { background-image: url('management-system.jpg'); }
+
+        .icon-box:hover::before {
+            filter: grayscale(0%) brightness(0.7);
+            opacity: 1;
+            transform: scale(1.15);
+        }
+
+        .icon-box i, .icon-box span { position: relative; z-index: 10; }
+
+        .icon-box:hover { 
+            background: rgba(99, 102, 241, 0.1); 
+            border-color: #6366f1; 
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
+
+        .icon-box i { font-size: 3rem; margin-bottom: 1.5rem; transition: 0.4s; color: rgba(255,255,255,0.6); }
+        .icon-box:hover i { color: #ffffff; transform: scale(1.1); text-shadow: 0 0 20px #6366f1; }
+
+        .logo-img {
+            object-fit: cover;
+            border-radius: 8px;
+            animation: etherPulse 4s ease-in-out infinite;
+        }
+
+        /* Modal Style */
+        .glass-modal {
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="p-6 border-b border-white/5 flex justify-between items-center bg-black/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <img src="aveeuro.jpg" alt="Logo" class="w-8 h-8 rounded border border-white/20">
+            <span class="font-black tracking-[0.3em] text-[10px] uppercase">Ether Nexus Workspace</span>
+        </div>
+        
+        <div class="relative group">
+            <button class="flex items-center gap-3 bg-white/5 px-4 py-2 border border-white/10 hover:border-indigo-500 transition-all">
+                <span id="userBadge" class="text-[10px] font-bold uppercase tracking-widest">Cargando Agente...</span>
+                <i class="fas fa-chevron-down text-[10px] text-indigo-500"></i>
+            </button>
+            <div class="absolute right-0 mt-2 w-56 bg-[#0a0a0a] border border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-2xl">
+                <a href="datos-personales.html" class="block p-4 text-[10px] font-bold uppercase hover:bg-indigo-500 hover:text-white transition-all border-b border-white/5">
+                    <i class="fas fa-user-edit mr-2"></i> Mis Datos
+                </a>
+                <button id="logoutBtn" class="w-full text-left p-4 text-[10px] font-bold uppercase text-red-500 hover:bg-red-500 hover:text-white transition-all">
+                    <i class="fas fa-power-off mr-2"></i> Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="mainContent" class="flex-grow flex flex-col items-center justify-center p-10">
+        <div class="mb-10">
+            <img src="aveeuro.jpg" alt="Logo Central" class="w-40 h-40 logo-img border border-white/10">
+        </div>
+
+        <div class="max-w-5xl w-full">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black tracking-tighter uppercase mb-2">Bienvenido, <span id="welcomeName">Colaborador</span></h2>
+                <div class="h-1 w-20 bg-indigo-600 mx-auto mb-4"></div>
+                <p class="text-gray-500 text-[10px] tracking-[0.4em] uppercase font-light">Ether Logic Independent Consultancy // Intranet</p>
+            </div>
+
+            <div class="workspace-grid">
+                <a href="datos-personales.html" class="icon-box personal-card">
+                    <i class="fas fa-id-card-alt"></i>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em]">Datos Personales</span>
+                </a>
+
+                <a href="contrato.html" class="icon-box contract-card">
+                    <i class="fas fa-file-contract"></i>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em]">Contrato Legal</span>
+                </a>
+
+                <a href="herramientas.html" class="icon-box tools-card">
+                    <i class="fas fa-tools"></i>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em]">Herramientas</span>
+                </a>
+
+                <a href="#" class="icon-box support-card">
+                    <i class="fas fa-headset"></i>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em]">Soporte IT</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div id="passwordModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl hidden">
+        <div class="max-w-md w-full p-8 glass-modal shadow-2xl relative">
+            <h2 class="text-xl font-black uppercase tracking-tighter mb-2 text-indigo-500">Actualización de Seguridad</h2>
+            <p class="text-gray-400 text-[9px] mb-6 uppercase tracking-[0.2em]">Se requiere una contraseña permanente para habilitar el workspace.</p>
+            
+            <form id="changePassForm" class="space-y-4">
+                <input type="password" id="newPassword" placeholder="NUEVA CONTRASEÑA" class="w-full bg-white/5 border border-white/10 p-4 text-xs outline-none focus:border-indigo-500 transition-all uppercase" required>
+                <input type="password" id="confirmPassword" placeholder="RECONFIRMAR" class="w-full bg-white/5 border border-white/10 p-4 text-xs outline-none focus:border-indigo-500 transition-all uppercase" required>
+                <button type="submit" class="w-full bg-white text-black font-black py-4 text-[10px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">Establecer Credencial</button>
+            </form>
+            <p id="passError" class="text-red-500 text-[9px] mt-4 uppercase font-bold text-center hidden"></p>
+        </div>
+    </div>
+
+    <footer class="p-6 text-center border-t border-white/5 text-[9px] text-gray-600 font-bold tracking-widest uppercase">
+        © 2026 Ether Logic Group // Secure Connection Active
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // CONFIGURACIÓN FIREBASE
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "tu-proyecto.firebaseapp.com",
+            projectId: "tu-proyecto",
+            storageBucket: "tu-proyecto.appspot.com",
+            messagingSenderId: "tu-id",
+            appId: "tu-app-id"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ELEMENTOS
+        const welcomeName = document.getElementById('welcomeName');
+        const userBadge = document.getElementById('userBadge');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const passwordModal = document.getElementById('passwordModal');
+
+        // 1. VERIFICAR SESIÓN Y PRIMER LOGIN
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const name = user.displayName || "Agente";
+                welcomeName.innerText = name;
+                userBadge.innerText = name;
+
+                // Detectar si debe cambiar contraseña
+                if (localStorage.getItem('firstLogin_' + user.email) === 'true') {
+                    passwordModal.classList.remove('hidden');
+                }
+            } else {
+                window.location.href = "auth.html";
+            }
+        });
+
+        // 2. LÓGICA DE CAMBIO DE CONTRASEÑA
+        document.getElementById('changePassForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const n1 = document.getElementById('newPassword').value;
+            const n2 = document.getElementById('confirmPassword').value;
+            const err = document.getElementById('passError');
+
+            if (n1 !== n2) {
+                err.innerText = "ERROR: LAS CONTRASEÑAS NO COINCIDEN";
+                err.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                await updatePassword(auth.currentUser, n1);
+                localStorage.removeItem('firstLogin_' + auth.currentUser.email);
+                passwordModal.classList.add('hidden');
+                alert("SISTEMA: Credencial actualizada.");
+            } catch (error) {
+                err.innerText = "ERROR: RE-AUTENTICACIÓN REQUERIDA. CIERRE SESIÓN E INGRESE DE NUEVO.";
+                err.classList.remove('hidden');
+            }
+        });
+
+        // 3. LOGOUT REAL
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = "auth.html";
+            });
+        });
+    </script>
+</body>
+</html>
