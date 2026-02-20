@@ -56,7 +56,6 @@
         }
         .hidden { display: none; }
         
-        /* Animación para resaltar la clave temporal */
         .temp-pass-display {
             border: 1px dashed #6366f1;
             background: rgba(99, 102, 241, 0.1);
@@ -116,8 +115,9 @@
             updatePassword 
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        // CONFIGURACIÓN ACTUALIZADA CON LA NUEVA API KEY
         const firebaseConfig = {
-            apiKey: "AIzaSyAZHuvxrFGeUn_DbexfgbQw8IjP1xtoMnc",
+            apiKey: "AIzaSyDX7CbuvxbiNBhJS1mM9xmFiO5tCiFMUCI",
             authDomain: "ether-nexus-intranet.firebaseapp.com",
             projectId: "ether-nexus-intranet",
             storageBucket: "ether-nexus-intranet.firebasestorage.app",
@@ -127,6 +127,8 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        
+        // Inicializar EmailJS con tu Public Key
         emailjs.init("jVFbff94NuuTI0jix"); 
 
         let isLogin = true;
@@ -165,7 +167,6 @@
             const password = passwordInput.value;
             const fullName = document.getElementById('fullName').value;
 
-            // CASO 1: EL USUARIO ESTÁ CAMBIANDO LA CONTRASEÑA OBLIGATORIAMENTE
             if (requiresPassChange) {
                 try {
                     mainBtn.innerText = "ACTUALIZANDO...";
@@ -179,13 +180,11 @@
                 return;
             }
 
-            // CASO 2: INICIO DE SESIÓN NORMAL
             if (isLogin) {
                 try {
                     mainBtn.innerText = "VALIDANDO...";
-                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    await signInWithEmailAndPassword(auth, email, password);
                     
-                    // Activamos modo cambio de contraseña
                     requiresPassChange = true;
                     authTitle.innerText = "SEGURIDAD";
                     authSubtitle.innerText = "CAMBIO DE CLAVE OBLIGATORIO";
@@ -196,12 +195,11 @@
                     document.getElementById('toggleContainer').classList.add('hidden');
 
                 } catch (error) {
-                    errorDiv.innerText = "ERROR: CREDENCIALES INVÁLIDAS";
+                    errorDiv.innerText = "FALLO DE SISTEMA: REVISE CREDENCIALES O LLAVE API";
                     errorDiv.classList.remove('hidden');
                     mainBtn.innerText = "Ingresar";
                 }
             } 
-            // CASO 3: REGISTRO DE NUEVO USUARIO
             else {
                 if(!fullName) { alert("Ingrese su nombre."); return; }
                 
@@ -221,7 +219,6 @@
                         time: new Date().toLocaleTimeString()
                     });
 
-                    // REEMPLAZAR FORMULARIO CON ÉXITO Y MOSTRAR CLAVE
                     formContainer.innerHTML = `
                         <div class="temp-pass-display">
                             <p class="text-[10px] text-indigo-400 mb-2 font-bold">REGISTRO COMPLETADO</p>

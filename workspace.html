@@ -52,7 +52,6 @@
             z-index: 0;
         }
 
-        /* Imágenes de fondo para las cards */
         .personal-card::before { background-image: url('coffe-office.jpg'); }
         .contract-card::before { background-image: url('contractor.jpg'); }
         .tools-card::before { background-image: url('workstation.jpg'); }
@@ -81,13 +80,6 @@
             border-radius: 8px;
             animation: etherPulse 4s ease-in-out infinite;
         }
-
-        .glass-modal {
-            background: rgba(5, 5, 5, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .hidden { display: none; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -114,7 +106,7 @@
         </div>
     </header>
 
-    <main id="mainContent" class="flex-grow flex flex-col items-center justify-center p-10">
+    <main id="mainContent" class="flex-grow flex flex-col items-center justify-center p-10 opacity-0 transition-opacity duration-1000">
         <div class="mb-10">
             <img src="aveeuro.jpg" alt="Logo Central" class="w-40 h-40 logo-img border border-white/10">
         </div>
@@ -131,17 +123,14 @@
                     <i class="fas fa-id-card-alt"></i>
                     <span class="text-[10px] font-black uppercase tracking-[0.2em]">Datos Personales</span>
                 </a>
-
                 <a href="contrato.html" class="icon-box contract-card">
                     <i class="fas fa-file-contract"></i>
                     <span class="text-[10px] font-black uppercase tracking-[0.2em]">Contrato Legal</span>
                 </a>
-
                 <a href="herramientas.html" class="icon-box tools-card">
                     <i class="fas fa-tools"></i>
                     <span class="text-[10px] font-black uppercase tracking-[0.2em]">Herramientas</span>
                 </a>
-
                 <a href="#" class="icon-box support-card">
                     <i class="fas fa-headset"></i>
                     <span class="text-[10px] font-black uppercase tracking-[0.2em]">Soporte IT</span>
@@ -157,10 +146,11 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN SINCRONIZADA
+        // CONFIGURACIÓN CON LA NUEVA API KEY
         const firebaseConfig = {
-            apiKey: "AIzaSyAZHuvxrFGeUn_DbexfgbQw8IjP1xtoMnc",
+            apiKey: "AIzaSyDX7CbuvxbiNBhJS1mM9xmFiO5tCiFMUCI",
             authDomain: "ether-nexus-intranet.firebaseapp.com",
             projectId: "ether-nexus-intranet",
             storageBucket: "ether-nexus-intranet.firebasestorage.app",
@@ -170,30 +160,43 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
         const welcomeName = document.getElementById('welcomeName');
         const userBadge = document.getElementById('userBadge');
         const logoutBtn = document.getElementById('logoutBtn');
+        const mainContent = document.getElementById('mainContent');
 
-        // VERIFICACIÓN DE SESIÓN ACTIVA
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Extraer nombre de Firebase o usar parte del correo
-                const name = user.displayName || user.email.split('@')[0];
-                welcomeName.innerText = name;
-                userBadge.innerText = name;
+                try {
+                    // Intentar obtener el nombre desde Firestore
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    let name = "";
+
+                    if (userDoc.exists()) {
+                        name = userDoc.data().nombre;
+                    } else {
+                        name = user.displayName || user.email.split('@')[0];
+                    }
+
+                    welcomeName.innerText = name;
+                    userBadge.innerText = name;
+                    mainContent.style.opacity = "1"; // Mostrar contenido suavemente
+
+                } catch (error) {
+                    console.error("Error cargando perfil:", error);
+                    welcomeName.innerText = user.email.split('@')[0];
+                    mainContent.style.opacity = "1";
+                }
             } else {
-                // Si no hay sesión, rebota al login
                 window.location.href = "index.html";
             }
         });
 
-        // LÓGICA DE CIERRE DE SESIÓN
         logoutBtn.addEventListener('click', () => {
             signOut(auth).then(() => {
                 window.location.href = "index.html";
-            }).catch((error) => {
-                console.error("Error al cerrar sesión:", error);
             });
         });
     </script>
