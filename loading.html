@@ -13,7 +13,8 @@
             height: 2px;
             background: #6366f1;
             box-shadow: 0 0 15px #6366f1;
-            animation: load 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            width: 0%;
+            animation: load 2.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes load {
@@ -62,7 +63,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // CONFIGURACIÓN ACTUALIZADA CON LA LLAVE FUNCIONAL
+        // CONFIGURACIÓN OFICIAL
         const firebaseConfig = {
             apiKey: "AIzaSyDX7CbuvxbiNBhJS1mM9xmFiO5tCiFMUCI",
             authDomain: "ether-nexus-intranet.firebaseapp.com",
@@ -83,26 +84,34 @@
             "Acceso concedido."
         ];
 
-        let i = 0;
-        const interval = setInterval(() => {
-            if(i < messages.length) {
-                statusText.innerText = messages[i];
-                i++;
+        // Animación de texto de estado
+        let msgIndex = 0;
+        const textInterval = setInterval(() => {
+            if(msgIndex < messages.length) {
+                statusText.innerText = messages[msgIndex];
+                msgIndex++;
             } else {
-                clearInterval(interval);
+                clearInterval(textInterval);
             }
-        }, 600);
+        }, 650);
 
-        // LÓGICA DE REDIRECCIÓN BASADA EN ESTADO REAL
+        // LÓGICA DE REDIRECCIÓN REFORZADA
+        let redirectTriggered = false;
+
         onAuthStateChanged(auth, (user) => {
-            // Esperamos a que la animación de la barra termine (aprox 2.8s)
+            // Esperamos 3.2 segundos para que la barra de carga termine visualmente
             setTimeout(() => {
-                if (user) {
-                    window.location.href = "workspace.html"; 
-                } else {
-                    window.location.href = "index.html"; 
+                if (!redirectTriggered) {
+                    redirectTriggered = true;
+                    if (user) {
+                        console.log("Sesión activa confirmada.");
+                        window.location.replace("workspace.html");
+                    } else {
+                        console.log("No se detectó sesión activa.");
+                        window.location.replace("index.html");
+                    }
                 }
-            }, 3000); 
+            }, 3200);
         });
     </script>
 </body>
