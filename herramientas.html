@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolkit Workspace | Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            /* FIX: Ruta exacta de la imagen solicitada */
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                url('workspace-laptop-coffee.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* Contenedor principal para asegurar el scroll suave */
+        .content-wrapper {
+            backdrop-filter: none;
+        }
+
+        /* Estado Inicial: Blanco y Negro + Transparente */
+        .tool-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 1.5rem; 
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem;
+            text-decoration: none;
+            filter: grayscale(100%) contrast(0.8);
+            opacity: 0.6;
+        }
+
+        /* Estado Hover: Color Total + Brillo */
+        .tool-card:hover { 
+            filter: grayscale(0%) contrast(1.1);
+            opacity: 1;
+            border-color: rgba(99, 102, 241, 0.6); 
+            background: rgba(255, 255, 255, 0.07); 
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .tool-card i {
+            transition: transform 0.4s ease;
+        }
+
+        .tool-card:hover i {
+            transform: scale(1.2);
+        }
+
+        .section-title { 
+            font-weight: 900;
+            font-size: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.4em; 
+            color: rgba(255, 255, 255, 0.3); 
+            margin-bottom: 1.5rem; 
+            display: block; 
+            border-left: 3px solid #6366f1; 
+            padding-left: 1rem; 
+        }
+
+        .tool-text {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* Efecto de entrada suave para el título */
+        h1 {
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="p-8 md:p-16">
+    <div class="max-w-6xl mx-auto content-wrapper">
+        <a href="dashboard.html" class="text-gray-400 text-[10px] font-bold uppercase mb-10 inline-block hover:text-indigo-400 transition-all tracking-widest">
+            <i class="fas fa-arrow-left mr-2"></i> Volver al Workspace
+        </a>
+        
+        <h1 class="text-6xl font-black uppercase tracking-tighter mb-16">Toolkit de Trabajo</h1>
+
+        <div class="space-y-20">
+            <section>
+                <span class="section-title">Sistemas & Core Engine (Alexis)</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="#" class="tool-card">
+                        <i class="fab fa-aws text-3xl text-orange-400"></i>
+                        <div class="tool-text">AWS Console</div>
+                    </a>
+                    <a href="#" class="tool-card">
+                        <i class="fab fa-github text-3xl text-white"></i>
+                        <div class="tool-text">GitHub Enterprise</div>
+                    </a>
+                    <a href="#" class="tool-card">
+                        <i class="fas fa-database text-3xl text-indigo-500"></i>
+                        <div class="tool-text">PostgreSQL Admin</div>
+                    </a>
+                </div>
+            </section>
+
+            <section>
+                <span class="section-title">Marketing & RRSS Operations</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="#" class="tool-card">
+                        <i class="fab fa-instagram text-3xl text-pink-500"></i>
+                        <div class="tool-text">Meta Business Suite</div>
+                    </a>
+                    <a href="#" class="tool-card">
+                        <i class="fas fa-chart-pie text-3xl text-green-400"></i>
+                        <div class="tool-text">Google Analytics</div>
+                    </a>
+                    <a href="#" class="tool-card">
+                        <i class="fas fa-edit text-3xl text-blue-400"></i>
+                        <div class="tool-text">Canva Pro Assets</div>
+                    </a>
+                </div>
+            </section>
+
+            <section>
+                <span class="section-title">Administración & Finanzas</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="#" class="tool-card">
+                        <i class="fas fa-file-invoice text-3xl text-yellow-500"></i>
+                        <div class="tool-text">Facturación</div>
+                    </a>
+                    <a href="#" class="tool-card">
+                        <i class="fas fa-university text-3xl text-gray-300"></i>
+                        <div class="tool-text">Gestión Bancaria</div>
+                    </a>
+                    <a href="#" class="tool-card">
+                        <i class="fas fa-users-cog text-3xl text-indigo-400"></i>
+                        <div class="tool-text">Nómina</div>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

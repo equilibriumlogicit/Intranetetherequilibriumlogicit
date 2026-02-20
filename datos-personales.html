@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ether Nexus | Datos Personales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #050505; 
+            color: #ffffff; 
+            min-height: 100vh;
+        }
+
+        .form-input { 
+            background: #0a0a0a; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 1rem; 
+            width: 100%; 
+            color: white; 
+            outline: none; 
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .form-input:focus { 
+            border-color: #6366f1; 
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.1);
+        }
+
+        .label-text { 
+            font-[900] 
+            text-[10px] 
+            uppercase 
+            tracking-widest 
+            text-indigo-500 
+            mb-2 
+            block; 
+        }
+
+        /* Estilo para el select de nacionalidades */
+        select.form-input {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236366f1' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            appearance: none;
+        }
+
+        option { background: #0a0a0a; color: white; }
+
+        .btn-save {
+            background: #ffffff;
+            color: #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            padding: 1.25rem;
+            width: 100%;
+            transition: 0.4s;
+            cursor: pointer;
+            margin-top: 2rem;
+        }
+
+        .btn-save:hover {
+            background: #6366f1;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body class="p-6 md:p-16">
+
+    <div class="max-w-4xl mx-auto">
+        <a href="dashboard.html" class="text-gray-500 text-[10px] font-bold uppercase mb-8 inline-block hover:text-indigo-400 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> Volver al Workspace
+        </a>
+        
+        <header class="mb-12">
+            <h1 class="text-4xl font-black uppercase tracking-tighter mb-2">Expediente de Personal</h1>
+            <p class="text-gray-500 text-xs uppercase tracking-widest font-bold">Ether Logic // Core Database Update</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            
+            <div class="flex flex-col items-center">
+                <span class="label-text">Fotografía Oficial</span>
+                <div class="w-full aspect-square bg-[#0a0a0a] border-2 border-dashed border-white/10 flex flex-col items-center justify-center relative group overflow-hidden cursor-pointer">
+                    <div id="imagePreview" class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-user-astronaut text-4xl text-gray-800 group-hover:text-indigo-500 transition-all"></i>
+                    </div>
+                    <input type="file" id="photoUpload" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" onchange="previewImage(this)">
+                    <div class="z-10 text-center mt-12">
+                        <span class="text-[8px] text-gray-600 font-bold uppercase tracking-widest group-hover:text-gray-400">Click para cargar</span>
+                    </div>
+                </div>
+                <p class="text-[8px] text-gray-600 mt-4 text-center leading-relaxed">FORMATOS: JPG, PNG. <br> MÁXIMO 5MB.</p>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+                
+                <div>
+                    <span class="label-text">Nombre Completo</span>
+                    <input type="text" class="form-input uppercase text-xs font-bold" placeholder="EJ: ALEXIS RIVERA">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <span class="label-text">Tipo de Identificación</span>
+                        <select class="form-input text-xs font-bold">
+                            <option value="DNI">DNI (Documento Nacional)</option>
+                            <option value="CI">CI (Cédula de Identidad)</option>
+                            <option value="PASAPORTE">Pasaporte Internacional</option>
+                            <option value="MIGRATORIO">Certificado Migratorio</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="label-text">Número de Documento</span>
+                        <input type="text" class="form-input font-mono text-xs" placeholder="00000000-X">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <span class="label-text">Nacionalidad</span>
+                        <select id="nacionalidad" class="form-input text-xs font-bold">
+                            <option value="" disabled selected>Seleccionar país...</option>
+                            <optgroup label="Latinoamérica & España">
+                                <option value="argentina">Argentina</option>
+                                <option value="boliviana">Boliviana</option>
+                                <option value="brasileña">Brasileña</option>
+                                <option value="chilena">Chilena</option>
+                                <option value="colombiana">Colombiana</option>
+                                <option value="costarricense">Costarricense</option>
+                                <option value="cubana">Cubana</option>
+                                <option value="ecuatoriana">Ecuatoriana</option>
+                                <option value="salvadoreña">Salvadoreña</option>
+                                <option value="española">Española</option>
+                                <option value="guatemalteca">Guatemalteca</option>
+                                <option value="hondureña">Hondureña</option>
+                                <option value="mexicana">Mexicana</option>
+                                <option value="nicaragüense">Nicaragüense</option>
+                                <option value="panameña">Panameña</option>
+                                <option value="paraguaya">Paraguaya</option>
+                                <option value="peruana">Peruana</option>
+                                <option value="puertorriqueña">Puertorriqueña</option>
+                                <option value="dominicana">Dominicana</option>
+                                <option value="uruguaya">Uruguaya</option>
+                                <option value="venezolana">Venezolana</option>
+                            </optgroup>
+                            <optgroup label="Norteamérica & Europa">
+                                <option value="estadounidense">Estadounidense</option>
+                                <option value="canadiense">Canadiense</option>
+                                <option value="alemana">Alemana</option>
+                                <option value="francesa">Francesa</option>
+                                <option value="italiana">Italiana</option>
+                                <option value="británica">Británica</option>
+                                <option value="portuguesa">Portuguesa</option>
+                            </optgroup>
+                            <optgroup label="Otros">
+                                <option value="china">China</option>
+                                <option value="japonesa">Japonesa</option>
+                                <option value="rusa">Rusa</option>
+                                <option value="australiana">Australiana</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="label-text">Fecha de Nacimiento</span>
+                        <div class="flex gap-2">
+                            <input type="date" id="fechaNacimiento" class="form-input text-xs font-bold" onchange="calcularEdad()">
+                            <div class="w-20 bg-indigo-900/30 border border-indigo-500/30 flex flex-col items-center justify-center rounded">
+                                <span class="text-[7px] font-black uppercase text-indigo-400">Edad</span>
+                                <span id="mostrarEdad" class="text-lg font-black text-white">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-save" onclick="guardarDatos()">
+                    Actualizar Nexus Core
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calcularEdad() {
+            const fechaVal = document.getElementById('fechaNacimiento').value;
+            if (fechaVal) {
+                const nacimiento = new Date(fechaVal);
+                const hoy = new Date();
+                let edad = hoy.getFullYear() - nacimiento.getFullYear();
+                const mes = hoy.getMonth() - nacimiento.getMonth();
+                
+                if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+                    edad--;
+                }
+                
+                document.getElementById('mostrarEdad').innerText = edad;
+            }
+        }
+
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function guardarDatos() {
+            alert("Sincronizando con el servidor central de Ether Logic... Datos actualizados correctamente.");
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

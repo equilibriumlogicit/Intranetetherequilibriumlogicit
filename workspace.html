@@ -52,6 +52,7 @@
             z-index: 0;
         }
 
+        /* Imágenes de fondo para las cards */
         .personal-card::before { background-image: url('coffe-office.jpg'); }
         .contract-card::before { background-image: url('contractor.jpg'); }
         .tools-card::before { background-image: url('workstation.jpg'); }
@@ -81,7 +82,6 @@
             animation: etherPulse 4s ease-in-out infinite;
         }
 
-        /* Modal Style */
         .glass-modal {
             background: rgba(5, 5, 5, 0.95);
             backdrop-filter: blur(20px);
@@ -100,7 +100,7 @@
         
         <div class="relative group">
             <button class="flex items-center gap-3 bg-white/5 px-4 py-2 border border-white/10 hover:border-indigo-500 transition-all">
-                <span id="userBadge" class="text-[10px] font-bold uppercase tracking-widest">Cargando Agente...</span>
+                <span id="userBadge" class="text-[10px] font-bold uppercase tracking-widest">Identificando...</span>
                 <i class="fas fa-chevron-down text-[10px] text-indigo-500"></i>
             </button>
             <div class="absolute right-0 mt-2 w-56 bg-[#0a0a0a] border border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-2xl">
@@ -121,7 +121,7 @@
 
         <div class="max-w-5xl w-full">
             <div class="text-center mb-16">
-                <h2 class="text-5xl font-black tracking-tighter uppercase mb-2">Bienvenido, <span id="welcomeName">Colaborador</span></h2>
+                <h2 class="text-5xl font-black tracking-tighter uppercase mb-2">Bienvenido, <span id="welcomeName">Agente</span></h2>
                 <div class="h-1 w-20 bg-indigo-600 mx-auto mb-4"></div>
                 <p class="text-gray-500 text-[10px] tracking-[0.4em] uppercase font-light">Ether Logic Independent Consultancy // Intranet</p>
             </div>
@@ -150,91 +150,50 @@
         </div>
     </main>
 
-    <div id="passwordModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl hidden">
-        <div class="max-w-md w-full p-8 glass-modal shadow-2xl relative">
-            <h2 class="text-xl font-black uppercase tracking-tighter mb-2 text-indigo-500">Actualización de Seguridad</h2>
-            <p class="text-gray-400 text-[9px] mb-6 uppercase tracking-[0.2em]">Se requiere una contraseña permanente para habilitar el workspace.</p>
-            
-            <form id="changePassForm" class="space-y-4">
-                <input type="password" id="newPassword" placeholder="NUEVA CONTRASEÑA" class="w-full bg-white/5 border border-white/10 p-4 text-xs outline-none focus:border-indigo-500 transition-all uppercase" required>
-                <input type="password" id="confirmPassword" placeholder="RECONFIRMAR" class="w-full bg-white/5 border border-white/10 p-4 text-xs outline-none focus:border-indigo-500 transition-all uppercase" required>
-                <button type="submit" class="w-full bg-white text-black font-black py-4 text-[10px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">Establecer Credencial</button>
-            </form>
-            <p id="passError" class="text-red-500 text-[9px] mt-4 uppercase font-bold text-center hidden"></p>
-        </div>
-    </div>
-
     <footer class="p-6 text-center border-t border-white/5 text-[9px] text-gray-600 font-bold tracking-widest uppercase">
         © 2026 Ether Logic Group // Secure Connection Active
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // CONFIGURACIÓN FIREBASE
+        // CONFIGURACIÓN SINCRONIZADA
         const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "tu-proyecto.firebaseapp.com",
-            projectId: "tu-proyecto",
-            storageBucket: "tu-proyecto.appspot.com",
-            messagingSenderId: "tu-id",
-            appId: "tu-app-id"
+            apiKey: "AIzaSyAZHuvxrFGeUn_DbexfgbQw8IjP1xtoMnc",
+            authDomain: "ether-nexus-intranet.firebaseapp.com",
+            projectId: "ether-nexus-intranet",
+            storageBucket: "ether-nexus-intranet.firebasestorage.app",
+            messagingSenderId: "380189316193",
+            appId: "1:380189316193:web:a3f0f430c2e26f5e9e4620"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // ELEMENTOS
         const welcomeName = document.getElementById('welcomeName');
         const userBadge = document.getElementById('userBadge');
         const logoutBtn = document.getElementById('logoutBtn');
-        const passwordModal = document.getElementById('passwordModal');
 
-        // 1. VERIFICAR SESIÓN Y PRIMER LOGIN
+        // VERIFICACIÓN DE SESIÓN ACTIVA
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                const name = user.displayName || "Agente";
+                // Extraer nombre de Firebase o usar parte del correo
+                const name = user.displayName || user.email.split('@')[0];
                 welcomeName.innerText = name;
                 userBadge.innerText = name;
-
-                // Detectar si debe cambiar contraseña
-                if (localStorage.getItem('firstLogin_' + user.email) === 'true') {
-                    passwordModal.classList.remove('hidden');
-                }
             } else {
-                window.location.href = "auth.html";
+                // Si no hay sesión, rebota al login
+                window.location.href = "index.html";
             }
         });
 
-        // 2. LÓGICA DE CAMBIO DE CONTRASEÑA
-        document.getElementById('changePassForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const n1 = document.getElementById('newPassword').value;
-            const n2 = document.getElementById('confirmPassword').value;
-            const err = document.getElementById('passError');
-
-            if (n1 !== n2) {
-                err.innerText = "ERROR: LAS CONTRASEÑAS NO COINCIDEN";
-                err.classList.remove('hidden');
-                return;
-            }
-
-            try {
-                await updatePassword(auth.currentUser, n1);
-                localStorage.removeItem('firstLogin_' + auth.currentUser.email);
-                passwordModal.classList.add('hidden');
-                alert("SISTEMA: Credencial actualizada.");
-            } catch (error) {
-                err.innerText = "ERROR: RE-AUTENTICACIÓN REQUERIDA. CIERRE SESIÓN E INGRESE DE NUEVO.";
-                err.classList.remove('hidden');
-            }
-        });
-
-        // 3. LOGOUT REAL
+        // LÓGICA DE CIERRE DE SESIÓN
         logoutBtn.addEventListener('click', () => {
             signOut(auth).then(() => {
-                window.location.href = "auth.html";
+                window.location.href = "index.html";
+            }).catch((error) => {
+                console.error("Error al cerrar sesión:", error);
             });
         });
     </script>

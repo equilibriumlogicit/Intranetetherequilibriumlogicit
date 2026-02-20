@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #ffffff; }
+        .contract-paper { 
+            background: #fff; color: #000; padding: 4rem; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            line-height: 1.6; font-size: 0.9rem;
+        }
+        .signature-box { 
+            border: 2px dashed #ccc; height: 100px; 
+            margin-top: 2rem; display: flex; 
+            align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body class="p-8 md:p-20 bg-[#0f0f0f]">
+    <div class="max-w-4xl mx-auto">
+        <a href="dashboard.html" class="text-gray-500 text-[10px] font-bold uppercase mb-10 inline-block hover:text-indigo-400"><i class="fas fa-arrow-left mr-2"></i> Cancelar y Volver</a>
+        
+        <div class="contract-paper rounded-sm mb-10">
+            <div class="text-center mb-10">
+                <h2 class="font-black text-xl uppercase tracking-widest">Contrato de Prestación de Servicios</h2>
+                <span class="text-[10px] text-gray-500">ETHER LOGIC INDEPENDENT CONSULTANCY // 2026</span>
+            </div>
+
+            <div class="space-y-6 text-justify">
+                <p><strong>PRIMERA: OBJETO DEL CONTRATO.</strong> El presente documento establece los términos bajo los cuales el colaborador prestará sus servicios profesionales para Ether Logic en las áreas asignadas, comprometiéndose a cumplir con los estándares técnicos y de confidencialidad de la empresa.</p>
+                
+                <p><strong>SEGUNDA: CONFIDENCIALIDAD.</strong> El colaborador acepta que toda la información, códigos fuente, datos de clientes y estrategias de marketing son propiedad intelectual exclusiva de Ether Logic y no podrán ser divulgados bajo ninguna circunstancia.</p>
+                
+                <p><strong>TERCERA: IDENTIFICACIÓN.</strong> El colaborador declara que los datos cargados en el área de "Datos Personales" son verídicos y corresponden a su documento de identidad legal (DNI, Pasaporte o CI).</p>
+
+                <div class="mt-20 pt-10 border-t border-gray-200 grid grid-cols-2 gap-20">
+                    <div>
+                        <div class="signature-box bg-gray-50 italic text-gray-400">
+                            Firma Digital de la Empresa
+                        </div>
+                        <span class="text-[9px] uppercase font-bold text-gray-400 block mt-2 text-center">Ether Logic CEO</span>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Escribe tu nombre completo para firmar" class="w-full border-b-2 border-black p-2 mt-10 outline-none font-serif italic text-lg text-center">
+                        <span class="text-[9px] uppercase font-bold text-gray-400 block mt-2 text-center">Firma del Colaborador</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="confirmarFirma()" class="w-full bg-indigo-600 py-6 font-black uppercase tracking-[0.4em] text-xs hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20">
+            Confirmar y Firmar Documento Legal
+        </button>
+    </div>
+
+    <script>
+        function confirmarFirma() {
+            alert("Documento firmado electrónicamente. Se ha enviado una copia a tu correo corporativo.");
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

@@ -55,6 +55,15 @@
             border: 1px solid rgba(255,255,255,0.05);
         }
         .hidden { display: none; }
+        
+        /* Animación para resaltar la clave temporal */
+        .temp-pass-display {
+            border: 1px dashed #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="h-screen flex items-center justify-center px-6">
@@ -72,34 +81,41 @@
             <p class="text-gray-500 text-[10px] font-bold tracking-widest uppercase mt-2" id="authSubtitle">Protocolo de Identidad</p>
         </div>
 
-        <form id="authForm" class="space-y-4">
-            <div id="nameField" class="hidden">
-                <input type="text" id="fullName" placeholder="NOMBRE COMPLETO" class="input-nexus">
+        <div id="formContainer">
+            <form id="authForm" class="space-y-4">
+                <div id="nameField" class="hidden">
+                    <input type="text" id="fullName" placeholder="NOMBRE COMPLETO" class="input-nexus">
+                </div>
+                
+                <input type="email" id="email" placeholder="CORREO CORPORATIVO" class="input-nexus" required>
+                
+                <div id="passwordField">
+                    <input type="password" id="password" placeholder="CONTRASEÑA" class="input-nexus">
+                </div>
+
+                <button type="submit" class="btn-nexus" id="mainBtn">Ingresar</button>
+            </form>
+
+            <div id="errorMessage" class="text-red-500 text-[9px] mt-4 text-center font-bold uppercase hidden tracking-tighter"></div>
+
+            <div id="toggleContainer" class="mt-8 text-center border-t border-white/5 pt-6">
+                <button id="toggleBtn" class="text-[9px] font-bold text-gray-500 hover:text-indigo-400 uppercase tracking-widest transition-all">
+                    ¿No tienes cuenta? Regístrate aquí
+                </button>
             </div>
-            
-            <input type="email" id="email" placeholder="CORREO CORPORATIVO" class="input-nexus" required>
-            
-            <div id="passwordField">
-                <input type="password" id="password" placeholder="CONTRASEÑA" class="input-nexus">
-            </div>
-
-            <button type="submit" class="btn-nexus" id="mainBtn">Ingresar</button>
-        </form>
-
-        <div id="errorMessage" class="text-red-500 text-[9px] mt-4 text-center font-bold uppercase hidden tracking-tighter"></div>
-
-        <div class="mt-8 text-center border-t border-white/5 pt-6">
-            <button id="toggleBtn" class="text-[9px] font-bold text-gray-500 hover:text-indigo-400 uppercase tracking-widest transition-all">
-                ¿No tienes cuenta? Regístrate aquí
-            </button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            updateProfile,
+            updatePassword 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // 1. CONFIGURACIÓN FIREBASE CARGADA
         const firebaseConfig = {
             apiKey: "AIzaSyAZHuvxrFGeUn_DbexfgbQw8IjP1xtoMnc",
             authDomain: "ether-nexus-intranet.firebaseapp.com",
@@ -111,18 +127,20 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        
-        // 2. PUBLIC KEY DE EMAILJS
         emailjs.init("jVFbff94NuuTI0jix"); 
 
         let isLogin = true;
+        let requiresPassChange = false;
 
         const toggleBtn = document.getElementById('toggleBtn');
         const authTitle = document.getElementById('authTitle');
+        const authSubtitle = document.getElementById('authSubtitle');
         const mainBtn = document.getElementById('mainBtn');
         const errorDiv = document.getElementById('errorMessage');
         const nameField = document.getElementById('nameField');
-        const passwordField = document.getElementById('passwordField');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const formContainer = document.getElementById('formContainer');
 
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
@@ -131,13 +149,9 @@
             
             if(isLogin) {
                 nameField.classList.add('hidden');
-                passwordField.classList.remove('hidden');
-                document.getElementById('password').required = true;
                 toggleBtn.innerText = '¿No tienes cuenta? Regístrate aquí';
             } else {
                 nameField.classList.remove('hidden');
-                passwordField.classList.add('hidden'); 
-                document.getElementById('password').required = false;
                 toggleBtn.innerText = '¿Ya tienes cuenta? Inicia sesión';
             }
             errorDiv.classList.add('hidden');
@@ -145,48 +159,81 @@
 
         document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName').value;
             errorDiv.classList.add('hidden');
 
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            const fullName = document.getElementById('fullName').value;
+
+            // CASO 1: EL USUARIO ESTÁ CAMBIANDO LA CONTRASEÑA OBLIGATORIAMENTE
+            if (requiresPassChange) {
+                try {
+                    mainBtn.innerText = "ACTUALIZANDO...";
+                    await updatePassword(auth.currentUser, password);
+                    window.location.href = "loading.html";
+                } catch (error) {
+                    errorDiv.innerText = "ERROR: MÍNIMO 6 CARACTERES O RE-INGRESE SESIÓN";
+                    errorDiv.classList.remove('hidden');
+                    mainBtn.innerText = "CONFIRMAR Y ENTRAR";
+                }
+                return;
+            }
+
+            // CASO 2: INICIO DE SESIÓN NORMAL
             if (isLogin) {
-                // FLUJO LOGIN
-                signInWithEmailAndPassword(auth, email, password)
-                    .then(() => { window.location.href = "loading.html"; })
-                    .catch((error) => {
-                        errorDiv.innerText = "ERROR: ACCESO DENEGADO - CREDENCIALES INVÁLIDAS";
-                        errorDiv.classList.remove('hidden');
-                    });
-            } else {
-                // FLUJO REGISTRO
-                if(!fullName) { alert("SISTEMA: Ingrese su nombre completo."); return; }
+                try {
+                    mainBtn.innerText = "VALIDANDO...";
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    
+                    // Activamos modo cambio de contraseña
+                    requiresPassChange = true;
+                    authTitle.innerText = "SEGURIDAD";
+                    authSubtitle.innerText = "CAMBIO DE CLAVE OBLIGATORIO";
+                    emailInput.classList.add('hidden');
+                    passwordInput.value = "";
+                    passwordInput.placeholder = "NUEVA CONTRASEÑA";
+                    mainBtn.innerText = "CONFIRMAR Y ENTRAR";
+                    document.getElementById('toggleContainer').classList.add('hidden');
+
+                } catch (error) {
+                    errorDiv.innerText = "ERROR: CREDENCIALES INVÁLIDAS";
+                    errorDiv.classList.remove('hidden');
+                    mainBtn.innerText = "Ingresar";
+                }
+            } 
+            // CASO 3: REGISTRO DE NUEVO USUARIO
+            else {
+                if(!fullName) { alert("Ingrese su nombre."); return; }
                 
                 const tempPass = Math.random().toString(36).slice(-8).toUpperCase();
-                const loginLink = window.location.origin + window.location.pathname; 
-                
-                mainBtn.innerText = "INICIANDO PROTOCOLO...";
+                mainBtn.innerText = "PROCESANDO...";
                 mainBtn.disabled = true;
 
                 try {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, tempPass);
                     await updateProfile(userCredential.user, { displayName: fullName });
 
-                    // ENVÍO DE EMAIL (Service ID y Template ID de tu cuenta)
                     await emailjs.send("service_lcrwaff", "template_hr615us", {
                         nombre_completo: fullName,
                         email: email, 
                         passcode: tempPass,
-                        link_ingreso: loginLink,
+                        link_ingreso: window.location.origin,
                         time: new Date().toLocaleTimeString()
                     });
 
-                    alert("SISTEMA: Protocolo aceptado. Revise su correo (" + email + ") para obtener su clave temporal.");
-                    window.location.reload(); 
+                    // REEMPLAZAR FORMULARIO CON ÉXITO Y MOSTRAR CLAVE
+                    formContainer.innerHTML = `
+                        <div class="temp-pass-display">
+                            <p class="text-[10px] text-indigo-400 mb-2 font-bold">REGISTRO COMPLETADO</p>
+                            <p class="text-[9px] text-gray-400 mb-4">ESTA ES TU CLAVE PROVISORIA:</p>
+                            <h2 class="text-3xl font-mono font-bold tracking-[0.3em] text-white">${tempPass}</h2>
+                        </div>
+                        <p class="text-[9px] text-center text-gray-500 mb-6 uppercase">Se ha enviado una copia a ${email}</p>
+                        <button onclick="location.reload()" class="btn-nexus">VOLVER AL LOGIN</button>
+                    `;
 
                 } catch (error) {
-                    alert("ERROR: " + error.message);
-                    errorDiv.innerText = "FALLO DE SISTEMA: " + error.message;
+                    errorDiv.innerText = "FALLO: " + error.message;
                     errorDiv.classList.remove('hidden');
                     mainBtn.innerText = "Registrar Equipo";
                     mainBtn.disabled = false;
