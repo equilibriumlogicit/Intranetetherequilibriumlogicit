@@ -33,16 +33,15 @@
         }
 
         .label-text { 
-            font-[900] 
-            text-[10px] 
-            uppercase 
-            tracking-widest 
-            text-indigo-500 
-            mb-2 
-            block; 
+            font-weight: 900;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            display: block;
         }
 
-        /* Estilo para el select de nacionalidades */
         select.form-input {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236366f1' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
             background-position: right 1rem center;
@@ -65,12 +64,19 @@
             transition: 0.4s;
             cursor: pointer;
             margin-top: 2rem;
+            border: none;
         }
 
         .btn-save:hover {
             background: #6366f1;
             color: #fff;
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-save:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -94,7 +100,7 @@
                     <div id="imagePreview" class="absolute inset-0 flex items-center justify-center">
                         <i class="fas fa-user-astronaut text-4xl text-gray-800 group-hover:text-indigo-500 transition-all"></i>
                     </div>
-                    <input type="file" id="photoUpload" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" onchange="previewImage(this)">
+                    <input type="file" id="photoUpload" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*">
                     <div class="z-10 text-center mt-12">
                         <span class="text-[8px] text-gray-600 font-bold uppercase tracking-widest group-hover:text-gray-400">Click para cargar</span>
                     </div>
@@ -106,13 +112,13 @@
                 
                 <div>
                     <span class="label-text">Nombre Completo</span>
-                    <input type="text" class="form-input uppercase text-xs font-bold" placeholder="EJ: ALEXIS RIVERA">
+                    <input type="text" id="nombreCompleto" class="form-input uppercase text-xs font-bold" placeholder="EJ: ALEXIS RIVERA">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <span class="label-text">Tipo de Identificación</span>
-                        <select class="form-input text-xs font-bold">
+                        <select id="tipoIdentificacion" class="form-input text-xs font-bold">
                             <option value="DNI">DNI (Documento Nacional)</option>
                             <option value="CI">CI (Cédula de Identidad)</option>
                             <option value="PASAPORTE">Pasaporte Internacional</option>
@@ -121,7 +127,7 @@
                     </div>
                     <div>
                         <span class="label-text">Número de Documento</span>
-                        <input type="text" class="form-input font-mono text-xs" placeholder="00000000-X">
+                        <input type="text" id="numDocumento" class="form-input font-mono text-xs" placeholder="00000000-X">
                     </div>
                 </div>
 
@@ -132,48 +138,17 @@
                             <option value="" disabled selected>Seleccionar país...</option>
                             <optgroup label="Latinoamérica & España">
                                 <option value="argentina">Argentina</option>
-                                <option value="boliviana">Boliviana</option>
-                                <option value="brasileña">Brasileña</option>
-                                <option value="chilena">Chilena</option>
-                                <option value="colombiana">Colombiana</option>
-                                <option value="costarricense">Costarricense</option>
-                                <option value="cubana">Cubana</option>
-                                <option value="ecuatoriana">Ecuatoriana</option>
-                                <option value="salvadoreña">Salvadoreña</option>
-                                <option value="española">Española</option>
-                                <option value="guatemalteca">Guatemalteca</option>
-                                <option value="hondureña">Hondureña</option>
                                 <option value="mexicana">Mexicana</option>
-                                <option value="nicaragüense">Nicaragüense</option>
-                                <option value="panameña">Panameña</option>
-                                <option value="paraguaya">Paraguaya</option>
-                                <option value="peruana">Peruana</option>
-                                <option value="puertorriqueña">Puertorriqueña</option>
-                                <option value="dominicana">Dominicana</option>
-                                <option value="uruguaya">Uruguaya</option>
-                                <option value="venezolana">Venezolana</option>
-                            </optgroup>
-                            <optgroup label="Norteamérica & Europa">
-                                <option value="estadounidense">Estadounidense</option>
-                                <option value="canadiense">Canadiense</option>
-                                <option value="alemana">Alemana</option>
-                                <option value="francesa">Francesa</option>
-                                <option value="italiana">Italiana</option>
-                                <option value="británica">Británica</option>
-                                <option value="portuguesa">Portuguesa</option>
-                            </optgroup>
-                            <optgroup label="Otros">
-                                <option value="china">China</option>
-                                <option value="japonesa">Japonesa</option>
-                                <option value="rusa">Rusa</option>
-                                <option value="australiana">Australiana</option>
-                            </optgroup>
+                                <option value="colombiana">Colombiana</option>
+                                <option value="española">Española</option>
+                                <option value="chilena">Chilena</option>
+                                </optgroup>
                         </select>
                     </div>
                     <div>
                         <span class="label-text">Fecha de Nacimiento</span>
                         <div class="flex gap-2">
-                            <input type="date" id="fechaNacimiento" class="form-input text-xs font-bold" onchange="calcularEdad()">
+                            <input type="date" id="fechaNacimiento" class="form-input text-xs font-bold">
                             <div class="w-20 bg-indigo-900/30 border border-indigo-500/30 flex flex-col items-center justify-center rounded">
                                 <span class="text-[7px] font-black uppercase text-indigo-400">Edad</span>
                                 <span id="mostrarEdad" class="text-lg font-black text-white">--</span>
@@ -182,45 +157,92 @@
                     </div>
                 </div>
 
-                <button class="btn-save" onclick="guardarDatos()">
+                <button id="btnGuardar" class="btn-save">
                     Actualizar Nexus Core
                 </button>
             </div>
         </div>
     </div>
 
-    <script>
-        function calcularEdad() {
-            const fechaVal = document.getElementById('fechaNacimiento').value;
-            if (fechaVal) {
-                const nacimiento = new Date(fechaVal);
-                const hoy = new Date();
-                let edad = hoy.getFullYear() - nacimiento.getFullYear();
-                const mes = hoy.getMonth() - nacimiento.getMonth();
-                
-                if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
-                    edad--;
-                }
-                
-                document.getElementById('mostrarEdad').innerText = edad;
-            }
-        }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        function previewImage(input) {
+        // CONFIGURACIÓN DE TU PROYECTO FIREBASE
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "TU_PROYECTO.firebaseapp.com",
+            projectId: "TU_PROYECTO_ID",
+            storageBucket: "TU_PROYECTO.appspot.com",
+            messagingSenderId: "TU_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variables de UI
+        const photoUpload = document.getElementById('photoUpload');
+        const fechaInput = document.getElementById('fechaNacimiento');
+        const btnGuardar = document.getElementById('btnGuardar');
+
+        // 1. Vista previa de imagen
+        photoUpload.addEventListener('change', function() {
             const preview = document.getElementById('imagePreview');
-            if (input.files && input.files[0]) {
+            if (this.files && this.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = (e) => {
                     preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-                }
-                reader.readAsDataURL(input.files[0]);
+                };
+                reader.readAsDataURL(this.files[0]);
             }
-        }
+        });
 
-        function guardarDatos() {
-            alert("Sincronizando con el servidor central de Ether Logic... Datos actualizados correctamente.");
-            window.location.href = 'dashboard.html';
-        }
+        // 2. Calcular Edad automáticamente
+        fechaInput.addEventListener('change', function() {
+            const nacimiento = new Date(this.value);
+            const hoy = new Date();
+            let edad = hoy.getFullYear() - nacimiento.getFullYear();
+            const mes = hoy.getMonth() - nacimiento.getMonth();
+            if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+                edad--;
+            }
+            document.getElementById('mostrarEdad').innerText = edad >= 0 ? edad : "--";
+        });
+
+        // 3. Guardar en Firebase
+        btnGuardar.addEventListener('click', async () => {
+            const datos = {
+                nombre: document.getElementById('nombreCompleto').value,
+                tipoDoc: document.getElementById('tipoIdentificacion').value,
+                numeroDoc: document.getElementById('numDocumento').value,
+                nacionalidad: document.getElementById('nacionalidad').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                timestamp: new Date()
+            };
+
+            // Validar campos mínimos
+            if(!datos.nombre || !datos.numeroDoc) {
+                alert("ERROR: Credenciales incompletas para Nexus Core.");
+                return;
+            }
+
+            try {
+                btnGuardar.innerText = "SINCRONIZANDO...";
+                btnGuardar.disabled = true;
+
+                // Guardamos en la colección 'empleados'
+                await addDoc(collection(db, "empleados"), datos);
+
+                alert("DATOS SINCRONIZADOS: Expediente actualizado en Ether Logic.");
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error("Error: ", error);
+                alert("FALLO DE CONEXIÓN: No se pudo contactar con la base de datos.");
+                btnGuardar.innerText = "REINTENTAR ACTUALIZACIÓN";
+                btnGuardar.disabled = false;
+            }
+        });
     </script>
 </body>
 </html>
