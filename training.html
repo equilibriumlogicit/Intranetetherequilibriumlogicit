@@ -4,17 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ether Nexus | Academy & Operations</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src='https://8x8.vc/vpaas-magic-cookie-3d5f47/external_api.js'></script>
+    <script src="https://meet.jit.si/external_api.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #ffffff; }
-        .glass-panel { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
-        .nav-tab.active { border-bottom: 2px solid #6366f1; color: #6366f1; }
-        .form-input { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1); padding: 0.75rem; width: 100%; color: white; border-radius: 2px; font-size: 12px; outline: none; }
-        .form-input:focus { border-color: #6366f1; }
-        .course-card:hover { transform: translateY(-5px); border-color: #6366f1; transition: 0.3s; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #050505; 
+            color: #ffffff; 
+            margin: 0;
+        }
+
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px); 
+        }
+
+        .nav-tab {
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .nav-tab.active { 
+            border-bottom: 2px solid #6366f1; 
+            color: #6366f1; 
+            opacity: 1;
+        }
+
+        .form-input { 
+            background: #0a0a0a; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 0.75rem; 
+            width: 100%; 
+            color: white; 
+            border-radius: 2px; 
+            font-size: 12px; 
+            outline: none; 
+        }
+
+        .course-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .course-card:hover { 
+            transform: translateY(-8px); 
+            border-color: #6366f1; 
+            background: rgba(99, 102, 241, 0.08);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
+        }
+
+        .status-badge {
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        .opcion-test {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 4px;
+            transition: 0.2s;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+        .opcion-test:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: #6366f1;
+        }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -24,6 +91,7 @@
             <i class="fas fa-arrow-left mr-2"></i> Workspace
         </a>
         <button onclick="switchTab('training')" class="nav-tab active uppercase text-[10px] font-black tracking-widest pb-2">Training Hub</button>
+        <button onclick="switchTab('test')" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Evaluación</button>
         <button onclick="switchTab('rrhh')" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Gestión RRHH</button>
         <button onclick="switchTab('meet')" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Nexus Meet</button>
     </nav>
@@ -31,23 +99,67 @@
     <main class="max-w-7xl mx-auto">
         
         <section id="training-sec" class="tab-content">
-            <header class="mb-8">
-                <h2 class="text-3xl font-black uppercase tracking-tighter">Nexus Academy</h2>
-                <p class="text-indigo-500 text-[10px] font-bold uppercase tracking-widest">Capacitación técnica y E-books corporativos</p>
+            <header class="mb-10">
+                <h2 class="text-4xl font-black uppercase tracking-tighter">Área de Capacitación</h2>
+                <div class="flex items-center gap-4 mt-2">
+                    <span class="h-[1px] w-12 bg-indigo-500"></span>
+                    <p class="text-indigo-400 text-[10px] font-bold uppercase tracking-[0.2em]">Material de Estudio Oficial</p>
+                </div>
             </header>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-panel p-6 course-card border-l-4 border-l-indigo-500">
-                    <i class="fas fa-book-open text-2xl mb-4 text-indigo-400"></i>
-                    <h3 class="font-bold text-sm uppercase mb-2">Manual de Operaciones v2.1</h3>
-                    <p class="text-xs text-gray-500 mb-4">Protocolos de seguridad y ética en consultoría independiente.</p>
-                    <button class="text-[10px] font-black bg-white text-black px-4 py-2 uppercase hover:bg-indigo-500 hover:text-white transition-all">Descargar PDF</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 course-card relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity"><i class="fas fa-terminal text-6xl"></i></div>
+                    <span class="status-badge bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">Nivel 01</span>
+                    <h3 class="font-black text-lg uppercase mt-4 mb-2 tracking-tight">Manual de Operaciones</h3>
+                    <p class="text-xs text-gray-400 mb-6 leading-relaxed">Arquitectura Ether Nexus y protocolos de respuesta v2.1.</p>
+                    <button onclick="descargarEbook('operaciones')" class="w-full bg-white text-black py-3 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i> Descargar PDF
+                    </button>
                 </div>
-                <div class="glass-panel p-6 course-card border-l-4 border-l-emerald-500">
-                    <i class="fas fa-play-circle text-2xl mb-4 text-emerald-400"></i>
-                    <h3 class="font-bold text-sm uppercase mb-2">Sistemas de Encriptación</h3>
-                    <p class="text-xs text-gray-500 mb-4">Curso en video sobre manejo de datos sensibles en la nube.</p>
-                    <button class="text-[10px] font-black bg-white text-black px-4 py-2 uppercase hover:bg-emerald-500 hover:text-white transition-all">Ver Módulo</button>
+
+                <div class="glass-panel p-8 course-card relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity"><i class="fas fa-key text-6xl"></i></div>
+                    <span class="status-badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Técnico</span>
+                    <h3 class="font-black text-lg uppercase mt-4 mb-2 tracking-tight">Sistemas de Encriptación</h3>
+                    <p class="text-xs text-gray-400 mb-6 leading-relaxed">Algoritmos AES-256 y gestión de claves RSA para agentes.</p>
+                    <button onclick="descargarEbook('encriptacion')" class="w-full bg-white text-black py-3 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-file-pdf"></i> Obtener E-book
+                    </button>
+                </div>
+
+                <div class="glass-panel p-8 course-card relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity"><i class="fas fa-user-secret text-6xl"></i></div>
+                    <span class="status-badge bg-red-500/20 text-red-400 border border-red-500/30">Crítico</span>
+                    <h3 class="font-black text-lg uppercase mt-4 mb-2 tracking-tight">Ciberseguridad Humana</h3>
+                    <p class="text-xs text-gray-400 mb-6 leading-relaxed">Prevención de ingeniería social y blindaje de identidad digital.</p>
+                    <button onclick="descargarEbook('seguridad')" class="w-full bg-white text-black py-3 text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-shield-alt"></i> Descargar Guía
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="test-sec" class="tab-content hidden">
+            <div class="max-w-2xl mx-auto">
+                <header class="text-center mb-10">
+                    <h2 class="text-3xl font-black uppercase tracking-tighter">Examen de Certificación</h2>
+                    <p class="text-gray-500 text-[10px] uppercase tracking-widest">Puntaje perfecto requerido para aprobar</p>
+                </header>
+                <div id="quiz-box" class="glass-panel p-10 border-t-2 border-indigo-500">
+                    <div id="pregunta-container">
+                        <h3 id="texto-pregunta" class="text-xl font-bold mb-6"></h3>
+                        <div id="opciones-lista" class="space-y-4"></div>
+                    </div>
+                    <div id="resultado-final" class="hidden text-center">
+                        <i id="resultado-icon" class="fas fa-award text-6xl mb-4"></i>
+                        <h3 id="resultado-titulo" class="text-2xl font-black uppercase mb-2"></h3>
+                        <p id="feedback-test" class="text-gray-400 text-sm mb-8"></p>
+                        <button id="btn-descargar-cert" onclick="emitirCertificado()" class="hidden w-full bg-emerald-600 text-white py-4 text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                            Generar Certificado PDF
+                        </button>
+                        <button onclick="reiniciarTest()" class="mt-4 text-[10px] text-gray-500 uppercase underline">Reiniciar</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -55,60 +167,37 @@
         <section id="rrhh-sec" class="tab-content hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div>
-                    <h2 class="text-3xl font-black uppercase tracking-tighter mb-6">Solicitud de Licencias</h2>
+                    <h2 class="text-3xl font-black uppercase tracking-tighter mb-6">Solicitudes</h2>
                     <form id="rrhhForm" class="space-y-4 glass-panel p-8">
-                        <div>
-                            <label class="text-[10px] font-black text-indigo-500 uppercase">Tipo de Solicitud</label>
-                            <select id="tipoLicencia" class="form-input mt-1">
-                                <option value="Vacaciones">Vacaciones Anuales</option>
-                                <option value="Enfermedad">Licencia Médica</option>
-                                <option value="Estudio">Día de Examen / Estudio</option>
-                                <option value="Extraordinaria">Solicitud Extraordinaria</option>
-                            </select>
-                        </div>
+                        <select id="tipoLicencia" class="form-input">
+                            <option value="Vacaciones">Vacaciones</option>
+                            <option value="Médica">Médica</option>
+                        </select>
                         <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="text-[10px] font-black text-indigo-500 uppercase">Desde</label>
-                                <input type="date" id="fechaInicio" class="form-input mt-1">
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-black text-indigo-500 uppercase">Hasta</label>
-                                <input type="date" id="fechaFin" class="form-input mt-1">
-                            </div>
+                            <input type="date" id="fechaInicio" class="form-input">
+                            <input type="date" id="fechaFin" class="form-input">
                         </div>
-                        <button type="button" onclick="enviarSolicitud()" class="w-full bg-indigo-600 p-3 text-[10px] font-black uppercase tracking-[3px] hover:bg-white hover:text-black transition-all">
-                            Enviar a Central
-                        </button>
+                        <button type="button" onclick="enviarSolicitud()" class="w-full bg-indigo-600 p-3 text-[10px] font-black uppercase tracking-widest">Enviar</button>
                     </form>
                 </div>
                 <div class="glass-panel p-8">
-                    <h3 class="text-sm font-black uppercase mb-4 border-b border-white/10 pb-2">Estado de Solicitudes</h3>
-                    <div id="listaSolicitudes" class="space-y-3">
-                        <p class="text-[10px] text-gray-500 italic uppercase">Sincronizando con el servidor de RRHH...</p>
-                    </div>
+                    <h3 class="text-sm font-black uppercase mb-4 border-b border-white/10 pb-2">Historial</h3>
+                    <div id="listaSolicitudes" class="space-y-3"></div>
                 </div>
             </div>
         </section>
 
         <section id="meet-sec" class="tab-content hidden">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-black uppercase tracking-tighter">Nexus Meet</h2>
-                <button onclick="startMeeting()" class="bg-indigo-600 px-6 py-2 text-[10px] font-black uppercase">Crear Nueva Sala</button>
-            </div>
             <div id="meet-container" class="w-full h-[600px] glass-panel flex items-center justify-center">
-                <div class="text-center">
-                    <i class="fas fa-video text-5xl text-white/10 mb-4"></i>
-                    <p class="text-gray-500 uppercase text-[10px] font-bold tracking-widest">Inicia la sala para conectar con el equipo</p>
-                </div>
+                <button onclick="startMeeting()" class="bg-indigo-600 px-6 py-2 text-[10px] font-black uppercase">Iniciar Sesión</button>
             </div>
         </section>
-
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDX7CbuvxbiNBhJS1mM9xmFiO5tCiFMUCI",
@@ -122,93 +211,144 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        let userEmail = "";
 
-        let userEmail = "Anonimo";
-
-        // Verificar sesión para asociar datos
         onAuthStateChanged(auth, (user) => {
-            if (user) { userEmail = user.email; }
+            if (user) { 
+                userEmail = user.email; 
+                iniciarSincronizacionRRHH();
+                cargarPregunta(); 
+            } else { window.location.href = "index.html"; }
         });
 
-        // --- LÓGICA TABS (Asignada a window para que funcione el onclick) ---
         window.switchTab = (tabId) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId + '-sec').classList.remove('hidden');
-            // Buscamos el botón que lanzó el evento
-            event.currentTarget.classList.add('active');
-        }
+            if (event) event.currentTarget.classList.add('active');
+        };
 
-        // --- LÓGICA RRHH (Guardar en Firebase) ---
-        window.enviarSolicitud = async () => {
-            const inicio = document.getElementById('fechaInicio').value;
-            const fin = document.getElementById('fechaFin').value;
-
-            if(!inicio || !fin) {
-                alert("Por favor selecciona ambas fechas");
-                return;
-            }
-
-            const data = {
-                usuario: userEmail,
-                tipo: document.getElementById('tipoLicencia').value,
-                inicio: inicio,
-                fin: fin,
-                status: 'Pendiente',
-                timestamp: new Date()
+        // --- LÓGICA E-BOOKS (CORREGIDA) ---
+        window.descargarEbook = (tipo) => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const material = {
+                operaciones: { t: "OPERACIONES NEXUS", c: [99, 102, 241], txt: ["1. Introduccion a la Red Cifrada","2. Protocolo de Incidencias","3. Respuesta en Tiempo Real"] },
+                encriptacion: { t: "ENCRIPTACION AVANZADA", c: [16, 185, 129], txt: ["1. Estandar AES-256","2. Manejo de Claves RSA","3. Seguridad de Terminales"] },
+                seguridad: { t: "CIBERSEGURIDAD", c: [239, 68, 68], txt: ["1. Ingenieria Social","2. Proteccion de Credenciales","3. Navegacion Segura"] }
             };
-            
-            try {
-                await addDoc(collection(db, "solicitudes_rrhh"), data);
-                alert("Solicitud registrada con éxito");
-                document.getElementById('rrhhForm').reset();
-            } catch (e) { 
-                console.error("Error al guardar:", e);
-                alert("Error al conectar con la base de datos");
+            const s = material[tipo];
+            doc.setFillColor(15,15,15); doc.rect(0,0,210,297,'F');
+            doc.setTextColor(s.c[0], s.c[1], s.c[2]); doc.setFontSize(22); doc.text(s.t, 20, 40);
+            doc.setTextColor(255,255,255); doc.setFontSize(10);
+            doc.text("Agente Autorizado: " + userEmail, 20, 55);
+            doc.text(s.txt, 20, 80);
+            doc.save(`Nexus_Ebook_${tipo}.pdf`);
+        };
+
+        // --- LÓGICA TEST ---
+        const banco = [
+            { q: "¿Cuál es el estándar de cifrado de Nexus?", o: ["AES-256", "César", "WPA"], r: 0 },
+            { q: "¿Qué se debe hacer ante una brecha?", o: ["Ignorar", "Reportar y Bloquear", "Reiniciar PC"], r: 1 },
+            { q: "¿El ID de agente es público?", o: ["Sí", "No", "Solo en redes"], r: 1 }
+        ];
+        let idx = 0; let ok = 0;
+        function cargarPregunta() {
+            if (idx < banco.length) {
+                const p = banco[idx];
+                document.getElementById('texto-pregunta').innerText = p.q;
+                const l = document.getElementById('opciones-lista'); l.innerHTML = "";
+                p.o.forEach((opt, i) => {
+                    const b = document.createElement('button');
+                    b.className = "opcion-test"; b.innerText = opt;
+                    b.onclick = () => { if(i === p.r) ok++; idx++; cargarPregunta(); };
+                    l.appendChild(b);
+                });
+            } else { mostrarFin(); }
+        }
+
+        function mostrarFin() {
+            document.getElementById('pregunta-container').classList.add('hidden');
+            const res = document.getElementById('resultado-final'); res.classList.remove('hidden');
+            if(ok === banco.length) {
+                document.getElementById('resultado-titulo').innerText = "APROBADO";
+                document.getElementById('resultado-icon').className = "fas fa-check-circle text-6xl text-emerald-500 mb-4";
+                document.getElementById('feedback-test').innerText = "Has completado la capacitación con éxito.";
+                document.getElementById('btn-descargar-cert').classList.remove('hidden');
+            } else {
+                document.getElementById('resultado-titulo').innerText = "NO APROBADO";
+                document.getElementById('resultado-icon').className = "fas fa-times-circle text-6xl text-red-500 mb-4";
+                document.getElementById('feedback-test').innerText = `Aciertos: ${ok}/${banco.length}. Inténtalo de nuevo.`;
             }
         }
 
-        // --- LISTENER REALTIME (Cargar de Firebase) ---
-        const q = query(collection(db, "solicitudes_rrhh"), orderBy("timestamp", "desc"));
-        onSnapshot(q, (snapshot) => {
-            const lista = document.getElementById('listaSolicitudes');
-            lista.innerHTML = "";
-            
-            if (snapshot.empty) {
-                lista.innerHTML = '<p class="text-[10px] text-gray-600 uppercase">No hay solicitudes registradas.</p>';
-            }
+        window.reiniciarTest = () => { idx = 0; ok = 0; document.getElementById('pregunta-container').classList.remove('hidden'); document.getElementById('resultado-final').classList.add('hidden'); cargarPregunta(); };
 
-            snapshot.forEach(doc => {
-                const item = doc.data();
-                const colorStatus = item.status === 'Pendiente' ? 'text-yellow-500 bg-yellow-500/10' : 'text-green-500 bg-green-500/10';
+        // --- CERTIFICADO (CORREGIDO PARA CARGAR IMAGEN) ---
+        window.emitirCertificado = () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('landscape');
+            const agente = userEmail.split('@')[0].toUpperCase();
+            
+            const img = new Image();
+            img.src = 'aveeuro.jpg'; 
+
+            // Función para dibujar el PDF
+            const generarPDF = (incluirImagen) => {
+                doc.setFillColor(5, 5, 5); doc.rect(0, 0, 297, 210, 'F');
+                doc.setDrawColor(99, 102, 241); doc.setLineWidth(2); doc.rect(10, 10, 277, 190);
                 
-                lista.innerHTML += `
-                    <div class="bg-white/5 p-4 border-l-2 border-indigo-500 flex flex-col gap-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] uppercase font-black text-indigo-400">${item.tipo}</span>
-                            <span class="text-[8px] px-2 py-0.5 font-black uppercase ${colorStatus}">${item.status}</span>
-                        </div>
-                        <p class="text-[10px] text-white">Periodo: ${item.inicio} al ${item.fin}</p>
-                        <p class="text-[8px] text-gray-600 uppercase">Solicitado por: ${item.usuario}</p>
-                    </div>`;
-            });
-        });
-
-        // --- LÓGICA VIDEO (JITSI) ---
-        window.startMeeting = () => {
-            const domain = 'meet.jit.si';
-            const options = {
-                roomName: 'EtherNexus_Operations_Secure',
-                width: '100%',
-                height: '100%',
-                parentNode: document.querySelector('#meet-container'),
-                interfaceConfigOverwrite: {
-                    TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'chat', 'raisehand', 'hangup']
+                if (incluirImagen) {
+                    try {
+                        doc.addImage(img, 'JPEG', 123, 20, 50, 25);
+                    } catch(e) { console.error("Error al renderizar imagen en PDF", e); }
                 }
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(30); doc.text("CERTIFICADO DE CAPACITACIÓN", 148, 70, { align: "center" });
+                doc.setFontSize(14); doc.text("Se otorga el presente reconocimiento al agente:", 148, 90, { align: "center" });
+                doc.setTextColor(99, 102, 241); doc.setFontSize(40); doc.text(agente, 148, 120, { align: "center" });
+                doc.setTextColor(150, 150, 150); doc.setFontSize(10);
+                doc.text("Por completar satisfactoriamente los módulos de formación Ether Nexus.", 148, 150, { align: "center" });
+                doc.text("ID: NEX-" + Math.random().toString(36).substr(2,9).toUpperCase(), 148, 170, { align: "center" });
+                doc.save(`Certificado_${agente}.pdf`);
             };
-            document.querySelector('#meet-container').innerHTML = "";
-            const api = new JitsiMeetExternalAPI(domain, options);
+
+            img.onload = () => generarPDF(true);
+            img.onerror = () => {
+                console.warn("No se pudo cargar aveeuro.jpg localmente. Generando certificado sin logo.");
+                generarPDF(false);
+            };
+        };
+
+        // --- RRHH ---
+        window.enviarSolicitud = async () => {
+            try {
+                await addDoc(collection(db, "solicitudes_rrhh"), {
+                    usuario: userEmail, tipo: document.getElementById('tipoLicencia').value,
+                    inicio: document.getElementById('fechaInicio').value,
+                    fin: document.getElementById('fechaFin').value, status: 'Pendiente', timestamp: new Date()
+                });
+                alert("Solicitud enviada");
+            } catch (e) { console.error(e); }
+        };
+
+        function iniciarSincronizacionRRHH() {
+            const q = query(collection(db, "solicitudes_rrhh"), where("usuario", "==", userEmail), orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const l = document.getElementById('listaSolicitudes'); l.innerHTML = "";
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    l.innerHTML += `<div class="bg-white/5 p-3 mb-2 border-l-2 border-indigo-500"><span class="text-[10px] text-indigo-400 font-bold uppercase">${d.tipo}</span><p class="text-[9px] text-gray-400">${d.inicio} al ${d.fin}</p></div>`;
+                });
+            });
         }
+
+        window.startMeeting = () => {
+            const options = { roomName: 'Nexus_Meet_' + userEmail.split('@')[0], width: '100%', height: '100%', parentNode: document.querySelector('#meet-container') };
+            document.getElementById('meet-container').innerHTML = "";
+            new JitsiMeetExternalAPI("meet.jit.si", options);
+        };
     </script>
 </body>
 </html>
