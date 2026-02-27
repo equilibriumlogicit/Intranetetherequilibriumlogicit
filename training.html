@@ -18,6 +18,7 @@
             background-color: #050505; 
             color: #ffffff; 
             margin: 0;
+            overflow-x: hidden;
         }
 
         .glass-panel { 
@@ -37,17 +38,6 @@
             opacity: 1;
         }
 
-        .form-input { 
-            background: #0a0a0a; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            padding: 0.75rem; 
-            width: 100%; 
-            color: white; 
-            border-radius: 2px; 
-            font-size: 12px; 
-            outline: none; 
-        }
-
         .course-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255,255,255,0.05);
@@ -60,14 +50,6 @@
             box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
         }
 
-        .status-badge {
-            font-size: 8px;
-            padding: 2px 6px;
-            border-radius: 100px;
-            text-transform: uppercase;
-            font-weight: 900;
-        }
-
         .opcion-test {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.1);
@@ -77,11 +59,17 @@
             cursor: pointer;
             width: 100%;
             text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
         }
+
         .opcion-test:hover {
             background: rgba(99, 102, 241, 0.15);
             border-color: #6366f1;
         }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -90,108 +78,83 @@
         <a href="dashboard.html" class="text-gray-500 hover:text-white transition-colors uppercase text-[10px] font-black tracking-widest">
             <i class="fas fa-arrow-left mr-2"></i> Workspace
         </a>
-        <button onclick="switchTab('training')" class="nav-tab active uppercase text-[10px] font-black tracking-widest pb-2">Training Hub</button>
-        <button onclick="switchTab('test')" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Evaluación</button>
-        <button onclick="switchTab('rrhh')" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Gestión RRHH</button>
-        <button onclick="switchTab('meet')" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Nexus Meet</button>
+        <button onclick="switchTab('training')" id="tab-training" class="nav-tab active uppercase text-[10px] font-black tracking-widest pb-2">Training Hub</button>
+        <button onclick="switchTab('test')" id="tab-test" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Evaluación</button>
+        <button onclick="switchTab('rrhh')" id="tab-rrhh" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Gestión RRHH</button>
+        <button onclick="switchTab('meet')" id="tab-meet" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Nexus Meet</button>
     </nav>
 
     <main class="max-w-7xl mx-auto">
         
-        <section id="training-sec" class="tab-content">
+        <section id="training-sec" class="tab-content active">
             <header class="mb-10">
-                <h2 class="text-4xl font-black uppercase tracking-tighter">Área de Capacitación</h2>
-                <div class="flex items-center gap-4 mt-2">
-                    <span class="h-[1px] w-12 bg-indigo-500"></span>
-                    <p class="text-indigo-400 text-[10px] font-bold uppercase tracking-[0.2em]">Material de Estudio Oficial</p>
-                </div>
+                <h2 class="text-4xl font-black uppercase tracking-tighter">Capacitación Operativa</h2>
+                <p class="text-indigo-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-2">Material de Grado Agente</p>
             </header>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="glass-panel p-8 course-card relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity"><i class="fas fa-terminal text-6xl"></i></div>
-                    <span class="status-badge bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">Nivel 01</span>
-                    <h3 class="font-black text-lg uppercase mt-4 mb-2 tracking-tight">Manual de Operaciones</h3>
-                    <p class="text-xs text-gray-400 mb-6 leading-relaxed">Arquitectura Ether Nexus y protocolos de respuesta v2.1.</p>
-                    <button onclick="descargarEbook('operaciones')" class="w-full bg-white text-black py-3 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-download"></i> Descargar PDF
-                    </button>
-                </div>
-
-                <div class="glass-panel p-8 course-card relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity"><i class="fas fa-key text-6xl"></i></div>
-                    <span class="status-badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Técnico</span>
-                    <h3 class="font-black text-lg uppercase mt-4 mb-2 tracking-tight">Sistemas de Encriptación</h3>
-                    <p class="text-xs text-gray-400 mb-6 leading-relaxed">Algoritmos AES-256 y gestión de claves RSA para agentes.</p>
-                    <button onclick="descargarEbook('encriptacion')" class="w-full bg-white text-black py-3 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-file-pdf"></i> Obtener E-book
-                    </button>
-                </div>
-
-                <div class="glass-panel p-8 course-card relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity"><i class="fas fa-user-secret text-6xl"></i></div>
-                    <span class="status-badge bg-red-500/20 text-red-400 border border-red-500/30">Crítico</span>
-                    <h3 class="font-black text-lg uppercase mt-4 mb-2 tracking-tight">Ciberseguridad Humana</h3>
-                    <p class="text-xs text-gray-400 mb-6 leading-relaxed">Prevención de ingeniería social y blindaje de identidad digital.</p>
-                    <button onclick="descargarEbook('seguridad')" class="w-full bg-white text-black py-3 text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-shield-alt"></i> Descargar Guía
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30"><i class="fas fa-terminal text-6xl"></i></div>
+                    <h3 class="font-black text-lg uppercase mb-2">Manual de Operaciones</h3>
+                    <p class="text-[10px] text-gray-400 mb-6">Arquitectura de red y protocolos de respuesta v2.6.</p>
+                    <button onclick="descargarEbook('operaciones')" class="w-full bg-white text-black py-3 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">
+                        Descargar PDF
                     </button>
                 </div>
             </div>
         </section>
 
-        <section id="test-sec" class="tab-content hidden">
+        <section id="test-sec" class="tab-content">
             <div class="max-w-2xl mx-auto">
-                <header class="text-center mb-10">
-                    <h2 class="text-3xl font-black uppercase tracking-tighter">Examen de Certificación</h2>
-                    <p class="text-gray-500 text-[10px] uppercase tracking-widest">Puntaje perfecto requerido para aprobar</p>
-                </header>
                 <div id="quiz-box" class="glass-panel p-10 border-t-2 border-indigo-500">
                     <div id="pregunta-container">
-                        <h3 id="texto-pregunta" class="text-xl font-bold mb-6"></h3>
+                        <h3 id="texto-pregunta" class="text-xl font-bold mb-8 uppercase tracking-tight text-indigo-400"></h3>
                         <div id="opciones-lista" class="space-y-4"></div>
                     </div>
+
                     <div id="resultado-final" class="hidden text-center">
-                        <i id="resultado-icon" class="fas fa-award text-6xl mb-4"></i>
-                        <h3 id="resultado-titulo" class="text-2xl font-black uppercase mb-2"></h3>
+                        <i id="resultado-icon" class="fas fa-award text-6xl mb-6"></i>
+                        <h2 id="resultado-titulo" class="text-3xl font-black uppercase mb-2"></h2>
                         <p id="feedback-test" class="text-gray-400 text-sm mb-8"></p>
-                        <button id="btn-descargar-cert" onclick="emitirCertificado()" class="hidden w-full bg-emerald-600 text-white py-4 text-xs font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-                            Generar Certificado PDF
+                        
+                        <button id="btn-descargar-cert" onclick="emitirCertificado()" class="hidden w-full bg-indigo-600 text-white py-4 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 transition-all">
+                            Emitir Certificado con Firma Digital
                         </button>
-                        <button onclick="reiniciarTest()" class="mt-4 text-[10px] text-gray-500 uppercase underline">Reiniciar</button>
+                        <button onclick="reiniciarTest()" class="mt-4 text-[10px] text-gray-500 uppercase underline">Reintentar</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="rrhh-sec" class="tab-content hidden">
+        <section id="rrhh-sec" class="tab-content">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div>
-                    <h2 class="text-3xl font-black uppercase tracking-tighter mb-6">Solicitudes</h2>
-                    <form id="rrhhForm" class="space-y-4 glass-panel p-8">
-                        <select id="tipoLicencia" class="form-input">
+                <div class="glass-panel p-8">
+                    <h2 class="text-2xl font-black uppercase mb-6">Solicitud de Licencia</h2>
+                    <form class="space-y-4">
+                        <select id="tipoLicencia" class="w-full bg-black border border-white/10 p-4 text-[10px] text-white uppercase outline-none">
                             <option value="Vacaciones">Vacaciones</option>
                             <option value="Médica">Médica</option>
                         </select>
                         <div class="grid grid-cols-2 gap-4">
-                            <input type="date" id="fechaInicio" class="form-input">
-                            <input type="date" id="fechaFin" class="form-input">
+                            <input type="date" id="fechaInicio" class="bg-black border border-white/10 p-4 text-[10px] text-white outline-none">
+                            <input type="date" id="fechaFin" class="bg-black border border-white/10 p-4 text-[10px] text-white outline-none">
                         </div>
-                        <button type="button" onclick="enviarSolicitud()" class="w-full bg-indigo-600 p-3 text-[10px] font-black uppercase tracking-widest">Enviar</button>
+                        <button type="button" onclick="enviarSolicitud()" class="w-full bg-indigo-600 py-4 text-[10px] font-black uppercase tracking-widest">Enviar a Central</button>
                     </form>
                 </div>
                 <div class="glass-panel p-8">
-                    <h3 class="text-sm font-black uppercase mb-4 border-b border-white/10 pb-2">Historial</h3>
+                    <h3 class="text-[10px] font-black uppercase text-gray-500 mb-4 border-b border-white/5 pb-2">Registros de Firebase</h3>
                     <div id="listaSolicitudes" class="space-y-3"></div>
                 </div>
             </div>
         </section>
 
-        <section id="meet-sec" class="tab-content hidden">
+        <section id="meet-sec" class="tab-content">
             <div id="meet-container" class="w-full h-[600px] glass-panel flex items-center justify-center">
-                <button onclick="startMeeting()" class="bg-indigo-600 px-6 py-2 text-[10px] font-black uppercase">Iniciar Sesión</button>
+                <button onclick="startMeeting()" class="bg-indigo-600 px-12 py-4 text-[10px] font-black uppercase tracking-widest">Iniciar Sesión Encriptada</button>
             </div>
         </section>
+
     </main>
 
     <script type="module">
@@ -211,48 +174,41 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        let userEmail = "";
+        let userEmail = "AGENTE_INVITADO";
 
         onAuthStateChanged(auth, (user) => {
             if (user) { 
                 userEmail = user.email; 
                 iniciarSincronizacionRRHH();
                 cargarPregunta(); 
-            } else { window.location.href = "index.html"; }
+            } else { cargarPregunta(); }
         });
 
-        window.switchTab = (tabId) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        // --- NAVEGACIÓN ---
+        window.switchTab = (id) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId + '-sec').classList.remove('hidden');
-            if (event) event.currentTarget.classList.add('active');
+            document.getElementById(id + '-sec').classList.add('active');
+            document.getElementById('tab-' + id).classList.add('active');
         };
 
-        // --- LÓGICA E-BOOKS (CORREGIDA) ---
+        // --- E-BOOKS ---
         window.descargarEbook = (tipo) => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const material = {
-                operaciones: { t: "OPERACIONES NEXUS", c: [99, 102, 241], txt: ["1. Introduccion a la Red Cifrada","2. Protocolo de Incidencias","3. Respuesta en Tiempo Real"] },
-                encriptacion: { t: "ENCRIPTACION AVANZADA", c: [16, 185, 129], txt: ["1. Estandar AES-256","2. Manejo de Claves RSA","3. Seguridad de Terminales"] },
-                seguridad: { t: "CIBERSEGURIDAD", c: [239, 68, 68], txt: ["1. Ingenieria Social","2. Proteccion de Credenciales","3. Navegacion Segura"] }
-            };
-            const s = material[tipo];
-            doc.setFillColor(15,15,15); doc.rect(0,0,210,297,'F');
-            doc.setTextColor(s.c[0], s.c[1], s.c[2]); doc.setFontSize(22); doc.text(s.t, 20, 40);
-            doc.setTextColor(255,255,255); doc.setFontSize(10);
-            doc.text("Agente Autorizado: " + userEmail, 20, 55);
-            doc.text(s.txt, 20, 80);
-            doc.save(`Nexus_Ebook_${tipo}.pdf`);
+            doc.setFillColor(10,10,10); doc.rect(0,0,210,297,'F');
+            doc.setTextColor(99,102,241); doc.setFontSize(22); doc.text("OPERACIONES NEXUS", 20, 40);
+            doc.setTextColor(255,255,255); doc.setFontSize(10); doc.text("Agente: " + userEmail, 20, 55);
+            doc.save(`Nexus_${tipo}.pdf`);
         };
 
-        // --- LÓGICA TEST ---
+        // --- EXAMEN ---
         const banco = [
-            { q: "¿Cuál es el estándar de cifrado de Nexus?", o: ["AES-256", "César", "WPA"], r: 0 },
-            { q: "¿Qué se debe hacer ante una brecha?", o: ["Ignorar", "Reportar y Bloquear", "Reiniciar PC"], r: 1 },
-            { q: "¿El ID de agente es público?", o: ["Sí", "No", "Solo en redes"], r: 1 }
+            { q: "¿CUÁL ES EL ESTÁNDAR DE CIFRADO DE NEXUS?", o: ["AES-256", "César", "WEP"], r: 0 },
+            { q: "¿PROTOCOLO ANTE BRECHA DETECTADA?", o: ["REINICIAR", "REPORTAR Y BLOQUEAR", "IGNORAR"], r: 1 }
         ];
         let idx = 0; let ok = 0;
+
         function cargarPregunta() {
             if (idx < banco.length) {
                 const p = banco[idx];
@@ -271,66 +227,54 @@
             document.getElementById('pregunta-container').classList.add('hidden');
             const res = document.getElementById('resultado-final'); res.classList.remove('hidden');
             if(ok === banco.length) {
-                document.getElementById('resultado-titulo').innerText = "APROBADO";
-                document.getElementById('resultado-icon').className = "fas fa-check-circle text-6xl text-emerald-500 mb-4";
-                document.getElementById('feedback-test').innerText = "Has completado la capacitación con éxito.";
+                document.getElementById('resultado-titulo').innerText = "CALIFICADO";
+                document.getElementById('resultado-icon').className = "fas fa-check-circle text-6xl text-emerald-500 mb-6";
                 document.getElementById('btn-descargar-cert').classList.remove('hidden');
             } else {
-                document.getElementById('resultado-titulo').innerText = "NO APROBADO";
-                document.getElementById('resultado-icon').className = "fas fa-times-circle text-6xl text-red-500 mb-4";
-                document.getElementById('feedback-test').innerText = `Aciertos: ${ok}/${banco.length}. Inténtalo de nuevo.`;
+                document.getElementById('resultado-titulo').innerText = "NO APTO";
+                document.getElementById('resultado-icon').className = "fas fa-times-circle text-6xl text-red-500 mb-6";
             }
         }
 
         window.reiniciarTest = () => { idx = 0; ok = 0; document.getElementById('pregunta-container').classList.remove('hidden'); document.getElementById('resultado-final').classList.add('hidden'); cargarPregunta(); };
 
-        // --- CERTIFICADO (CORREGIDO PARA CARGAR IMAGEN) ---
+        // --- CERTIFICADO CON IMAGEN ---
         window.emitirCertificado = () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('landscape');
             const agente = userEmail.split('@')[0].toUpperCase();
             
             const img = new Image();
-            img.src = 'aveeuro.jpg'; 
+            img.src = 'aveeuro.jpg'; // DEBE ESTAR EN LA MISMA CARPETA
 
-            // Función para dibujar el PDF
-            const generarPDF = (incluirImagen) => {
+            img.onload = () => {
                 doc.setFillColor(5, 5, 5); doc.rect(0, 0, 297, 210, 'F');
                 doc.setDrawColor(99, 102, 241); doc.setLineWidth(2); doc.rect(10, 10, 277, 190);
                 
-                if (incluirImagen) {
-                    try {
-                        doc.addImage(img, 'JPEG', 123, 20, 50, 25);
-                    } catch(e) { console.error("Error al renderizar imagen en PDF", e); }
-                }
+                try {
+                    doc.addImage(img, 'JPEG', 123, 20, 50, 30);
+                } catch(e) { console.error("Imagen no encontrada"); }
                 
                 doc.setTextColor(255, 255, 255);
-                doc.setFontSize(30); doc.text("CERTIFICADO DE CAPACITACIÓN", 148, 70, { align: "center" });
-                doc.setFontSize(14); doc.text("Se otorga el presente reconocimiento al agente:", 148, 90, { align: "center" });
-                doc.setTextColor(99, 102, 241); doc.setFontSize(40); doc.text(agente, 148, 120, { align: "center" });
-                doc.setTextColor(150, 150, 150); doc.setFontSize(10);
-                doc.text("Por completar satisfactoriamente los módulos de formación Ether Nexus.", 148, 150, { align: "center" });
-                doc.text("ID: NEX-" + Math.random().toString(36).substr(2,9).toUpperCase(), 148, 170, { align: "center" });
+                doc.setFontSize(30); doc.text("CERTIFICADO DE AGENTE", 148, 70, { align: "center" });
+                doc.setTextColor(99, 102, 241);
+                doc.setFontSize(45); doc.text(agente, 148, 115, { align: "center" });
+                doc.setTextColor(150, 150, 150);
+                doc.setFontSize(10); doc.text("AUTORIZACIÓN NIVEL 1 - ETHER NEXUS ACADEMY", 148, 150, { align: "center" });
+                
                 doc.save(`Certificado_${agente}.pdf`);
             };
-
-            img.onload = () => generarPDF(true);
-            img.onerror = () => {
-                console.warn("No se pudo cargar aveeuro.jpg localmente. Generando certificado sin logo.");
-                generarPDF(false);
-            };
+            img.onerror = () => { alert("Error: aveeuro.jpg no encontrada."); };
         };
 
         // --- RRHH ---
         window.enviarSolicitud = async () => {
-            try {
-                await addDoc(collection(db, "solicitudes_rrhh"), {
-                    usuario: userEmail, tipo: document.getElementById('tipoLicencia').value,
-                    inicio: document.getElementById('fechaInicio').value,
-                    fin: document.getElementById('fechaFin').value, status: 'Pendiente', timestamp: new Date()
-                });
-                alert("Solicitud enviada");
-            } catch (e) { console.error(e); }
+            await addDoc(collection(db, "solicitudes_rrhh"), {
+                usuario: userEmail, tipo: document.getElementById('tipoLicencia').value,
+                inicio: document.getElementById('fechaInicio').value,
+                fin: document.getElementById('fechaFin').value, timestamp: new Date()
+            });
+            alert("Solicitud Enviada");
         };
 
         function iniciarSincronizacionRRHH() {
@@ -339,15 +283,14 @@
                 const l = document.getElementById('listaSolicitudes'); l.innerHTML = "";
                 snapshot.forEach(doc => {
                     const d = doc.data();
-                    l.innerHTML += `<div class="bg-white/5 p-3 mb-2 border-l-2 border-indigo-500"><span class="text-[10px] text-indigo-400 font-bold uppercase">${d.tipo}</span><p class="text-[9px] text-gray-400">${d.inicio} al ${d.fin}</p></div>`;
+                    l.innerHTML += `<div class="bg-white/5 p-3 mb-2 border-l-2 border-indigo-500 text-[9px] uppercase tracking-tighter">${d.tipo} | ${d.inicio}</div>`;
                 });
             });
         }
 
         window.startMeeting = () => {
-            const options = { roomName: 'Nexus_Meet_' + userEmail.split('@')[0], width: '100%', height: '100%', parentNode: document.querySelector('#meet-container') };
             document.getElementById('meet-container').innerHTML = "";
-            new JitsiMeetExternalAPI("meet.jit.si", options);
+            new JitsiMeetExternalAPI("meet.jit.si", { roomName: 'Nexus_' + userEmail.split('@')[0], width: '100%', height: '100%', parentNode: document.querySelector('#meet-container') });
         };
     </script>
 </body>
