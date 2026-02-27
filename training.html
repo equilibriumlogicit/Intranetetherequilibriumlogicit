@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ether Nexus | Academy & Operations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src='https://8x8.vc/vpaas-magic-cookie-3d5f47/external_api.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #ffffff; }
+        .glass-panel { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
+        .nav-tab.active { border-bottom: 2px solid #6366f1; color: #6366f1; }
+        .form-input { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1); padding: 0.75rem; width: 100%; color: white; border-radius: 2px; font-size: 12px; outline: none; }
+        .form-input:focus { border-color: #6366f1; }
+        .course-card:hover { transform: translateY(-5px); border-color: #6366f1; transition: 0.3s; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <nav class="max-w-7xl mx-auto flex flex-wrap gap-8 mb-12 border-b border-white/5 pb-4">
+        <a href="dashboard.html" class="text-gray-500 hover:text-white transition-colors uppercase text-[10px] font-black tracking-widest">
+            <i class="fas fa-arrow-left mr-2"></i> Workspace
+        </a>
+        <button onclick="switchTab('training')" class="nav-tab active uppercase text-[10px] font-black tracking-widest pb-2">Training Hub</button>
+        <button onclick="switchTab('rrhh')" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Gestión RRHH</button>
+        <button onclick="switchTab('meet')" class="nav-tab uppercase text-[10px] font-black tracking-widest pb-2">Nexus Meet</button>
+    </nav>
+
+    <main class="max-w-7xl mx-auto">
+        
+        <section id="training-sec" class="tab-content">
+            <header class="mb-8">
+                <h2 class="text-3xl font-black uppercase tracking-tighter">Nexus Academy</h2>
+                <p class="text-indigo-500 text-[10px] font-bold uppercase tracking-widest">Capacitación técnica y E-books corporativos</p>
+            </header>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 course-card border-l-4 border-l-indigo-500">
+                    <i class="fas fa-book-open text-2xl mb-4 text-indigo-400"></i>
+                    <h3 class="font-bold text-sm uppercase mb-2">Manual de Operaciones v2.1</h3>
+                    <p class="text-xs text-gray-500 mb-4">Protocolos de seguridad y ética en consultoría independiente.</p>
+                    <button class="text-[10px] font-black bg-white text-black px-4 py-2 uppercase hover:bg-indigo-500 hover:text-white transition-all">Descargar PDF</button>
+                </div>
+                <div class="glass-panel p-6 course-card border-l-4 border-l-emerald-500">
+                    <i class="fas fa-play-circle text-2xl mb-4 text-emerald-400"></i>
+                    <h3 class="font-bold text-sm uppercase mb-2">Sistemas de Encriptación</h3>
+                    <p class="text-xs text-gray-500 mb-4">Curso en video sobre manejo de datos sensibles en la nube.</p>
+                    <button class="text-[10px] font-black bg-white text-black px-4 py-2 uppercase hover:bg-emerald-500 hover:text-white transition-all">Ver Módulo</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="rrhh-sec" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl font-black uppercase tracking-tighter mb-6">Solicitud de Licencias</h2>
+                    <form id="rrhhForm" class="space-y-4 glass-panel p-8">
+                        <div>
+                            <label class="text-[10px] font-black text-indigo-500 uppercase">Tipo de Solicitud</label>
+                            <select id="tipoLicencia" class="form-input mt-1">
+                                <option value="Vacaciones">Vacaciones Anuales</option>
+                                <option value="Enfermedad">Licencia Médica</option>
+                                <option value="Estudio">Día de Examen / Estudio</option>
+                                <option value="Extraordinaria">Solicitud Extraordinaria</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-black text-indigo-500 uppercase">Desde</label>
+                                <input type="date" id="fechaInicio" class="form-input mt-1">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-indigo-500 uppercase">Hasta</label>
+                                <input type="date" id="fechaFin" class="form-input mt-1">
+                            </div>
+                        </div>
+                        <button type="button" onclick="enviarSolicitud()" class="w-full bg-indigo-600 p-3 text-[10px] font-black uppercase tracking-[3px] hover:bg-white hover:text-black transition-all">
+                            Enviar a Central
+                        </button>
+                    </form>
+                </div>
+                <div class="glass-panel p-8">
+                    <h3 class="text-sm font-black uppercase mb-4 border-b border-white/10 pb-2">Estado de Solicitudes</h3>
+                    <div id="listaSolicitudes" class="space-y-3">
+                        <p class="text-[10px] text-gray-500 italic uppercase">Sincronizando con el servidor de RRHH...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="meet-sec" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-black uppercase tracking-tighter">Nexus Meet</h2>
+                <button onclick="startMeeting()" class="bg-indigo-600 px-6 py-2 text-[10px] font-black uppercase">Crear Nueva Sala</button>
+            </div>
+            <div id="meet-container" class="w-full h-[600px] glass-panel flex items-center justify-center">
+                <div class="text-center">
+                    <i class="fas fa-video text-5xl text-white/10 mb-4"></i>
+                    <p class="text-gray-500 uppercase text-[10px] font-bold tracking-widest">Inicia la sala para conectar con el equipo</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDX7CbuvxbiNBhJS1mM9xmFiO5tCiFMUCI",
+            authDomain: "ether-nexus-intranet.firebaseapp.com",
+            projectId: "ether-nexus-intranet",
+            storageBucket: "ether-nexus-intranet.firebasestorage.app",
+            messagingSenderId: "380189316193",
+            appId: "1:380189316193:web:a3f0f430c2e26f5e9e4620"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let userEmail = "Anonimo";
+
+        // Verificar sesión para asociar datos
+        onAuthStateChanged(auth, (user) => {
+            if (user) { userEmail = user.email; }
+        });
+
+        // --- LÓGICA TABS (Asignada a window para que funcione el onclick) ---
+        window.switchTab = (tabId) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId + '-sec').classList.remove('hidden');
+            // Buscamos el botón que lanzó el evento
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- LÓGICA RRHH (Guardar en Firebase) ---
+        window.enviarSolicitud = async () => {
+            const inicio = document.getElementById('fechaInicio').value;
+            const fin = document.getElementById('fechaFin').value;
+
+            if(!inicio || !fin) {
+                alert("Por favor selecciona ambas fechas");
+                return;
+            }
+
+            const data = {
+                usuario: userEmail,
+                tipo: document.getElementById('tipoLicencia').value,
+                inicio: inicio,
+                fin: fin,
+                status: 'Pendiente',
+                timestamp: new Date()
+            };
+            
+            try {
+                await addDoc(collection(db, "solicitudes_rrhh"), data);
+                alert("Solicitud registrada con éxito");
+                document.getElementById('rrhhForm').reset();
+            } catch (e) { 
+                console.error("Error al guardar:", e);
+                alert("Error al conectar con la base de datos");
+            }
+        }
+
+        // --- LISTENER REALTIME (Cargar de Firebase) ---
+        const q = query(collection(db, "solicitudes_rrhh"), orderBy("timestamp", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const lista = document.getElementById('listaSolicitudes');
+            lista.innerHTML = "";
+            
+            if (snapshot.empty) {
+                lista.innerHTML = '<p class="text-[10px] text-gray-600 uppercase">No hay solicitudes registradas.</p>';
+            }
+
+            snapshot.forEach(doc => {
+                const item = doc.data();
+                const colorStatus = item.status === 'Pendiente' ? 'text-yellow-500 bg-yellow-500/10' : 'text-green-500 bg-green-500/10';
+                
+                lista.innerHTML += `
+                    <div class="bg-white/5 p-4 border-l-2 border-indigo-500 flex flex-col gap-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] uppercase font-black text-indigo-400">${item.tipo}</span>
+                            <span class="text-[8px] px-2 py-0.5 font-black uppercase ${colorStatus}">${item.status}</span>
+                        </div>
+                        <p class="text-[10px] text-white">Periodo: ${item.inicio} al ${item.fin}</p>
+                        <p class="text-[8px] text-gray-600 uppercase">Solicitado por: ${item.usuario}</p>
+                    </div>`;
+            });
+        });
+
+        // --- LÓGICA VIDEO (JITSI) ---
+        window.startMeeting = () => {
+            const domain = 'meet.jit.si';
+            const options = {
+                roomName: 'EtherNexus_Operations_Secure',
+                width: '100%',
+                height: '100%',
+                parentNode: document.querySelector('#meet-container'),
+                interfaceConfigOverwrite: {
+                    TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'chat', 'raisehand', 'hangup']
+                }
+            };
+            document.querySelector('#meet-container').innerHTML = "";
+            const api = new JitsiMeetExternalAPI(domain, options);
+        }
+    </script>
+</body>
+</html>
